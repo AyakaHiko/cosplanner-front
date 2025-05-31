@@ -10,6 +10,11 @@ export default defineConfig({
     vue(),
     vueDevTools(),
   ],
+  preview: {
+    port: 4173,
+    host: true,
+    allowedHosts: ['cosplanner-front.onrender.com', 'localhost'],
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
