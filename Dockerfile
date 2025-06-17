@@ -1,6 +1,6 @@
 FROM node:18 AS builder
 
-WORKDIR /app
+WORKDIR /front
 
 COPY package*.json ./
 RUN npm install

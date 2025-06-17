@@ -1,0 +1,21 @@
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+
+[data-bs-theme="light"] .header,
+[data-bs-theme="light"] .footer {
+  background-color: $teal-300;
+}
+[data-bs-theme="dark"] .header,
+[data-bs-theme="dark"] .footer {
+  background-color: $teal-700;
+}
+
+.nav-auth{
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+.auth-container{
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+}

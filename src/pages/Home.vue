@@ -1,6 +1,13 @@
 <script setup>
+
 </script>
 
 <template>
-  <router-view/>
+<main>
+  home
+</main>
 </template>
+
+<style scoped>
+
+</style>
