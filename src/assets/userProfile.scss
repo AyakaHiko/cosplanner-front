@@ -1,0 +1,60 @@
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+
+.card{
+  max-width: 50rem;
+  padding: 1rem;
+}
+
+.user-header{
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.avatar{
+  display: inline-flex;
+}
+.avatar img{
+  border-radius: 50%;
+  width: 6rem;
+  height: 6rem;
+  object-fit: cover;
+}
+.username{
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 0.3rem;
+}
+.statistics-bar {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  height: 10%;
+}
+
+.statistic {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  text-decoration: none;
+  color: var(--bs-body-color);
+
+}
+
+.stat-count {
+  font-weight: bold;
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+
+.stat-name {
+  font-size: 0.875rem;
+  color: var(--bs-secondary-color);
+  transition: color 0.3s ease;
+}
+
+.statistic:hover .stat-name {
+  color: var(--bs-body-color);
+}

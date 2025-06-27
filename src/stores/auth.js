@@ -6,10 +6,12 @@ export const useAuthStore = defineStore('auth', () => {
   const token = ref(null);
   const isAuthenticated = ref(false);
 
-  const savedToken = sessionStorage.getItem('token');
-  if (savedToken) {
-    token.value = savedToken;
-    isAuthenticated.value = true;
+  function init() {
+    const savedToken = localStorage.getItem('token') || sessionStorage.getItem('token');
+    if (savedToken) {
+      token.value = savedToken;
+      isAuthenticated.value = true;
+    }
   }
 
   async function login(credentials) {
@@ -30,7 +32,11 @@ export const useAuthStore = defineStore('auth', () => {
       }
 
       token.value = data.access_token;
-      sessionStorage.setItem('token', token.value);
+      if(credentials.remember){
+        localStorage.setItem('token', token.value)
+      } else {
+        sessionStorage.setItem('token', token.value);
+      }
       isAuthenticated.value = true;
 
       return data;
@@ -88,6 +94,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  init();
   return {
     user,
     token,

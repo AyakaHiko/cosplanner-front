@@ -1,26 +1,50 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import DefaultLayout from '@/layouts/DefaultLayout.vue'
-import Home from '@/pages/Home.vue'
-import Login from "@/pages/Authorization/Login.vue";
-import Register from "@/pages/Authorization/Register.vue";
-import Profile from "@/pages/User/Profile.vue";
+import authMiddleware from "@/router/middleware/authMiddleware.js";
 
 const routes = [
   {
     path: '/',
-    component: DefaultLayout,
+    component: () => import('@/layouts/DefaultLayout.vue'),
     children: [
-      { path: '', component: Home },
-      { path: '/login', component: Login },
-      { path: '/register', component: Register },
-      { path: '/profile', component: Profile},
+      {
+        path: '',
+        name: 'home',
+        component: () => import('@/pages/Home.vue')
+      },
+      {
+        path: 'login',
+        name: 'login',
+        component: () => import('@/pages/Authorization/Login.vue'),
+        meta: { requiresGuest: true }
+
+      },
+      {
+        path: 'register',
+        name: 'register',
+        component: () => import('@/pages/Authorization/Register.vue'),
+        meta: { requiresGuest: true }
+      },
+      {
+        path: 'profile',
+        name: 'profile',
+        component: () => import('@/pages/User/Profile.vue')
+      },
+      {
+        path: 'settings',
+        name: 'settings',
+        component: () => import('@/pages/User/Settings.vue')
+      }
     ]
   }
 ]
-
 const router = createRouter({
   history: createWebHistory(),
   routes
 })
-
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresGuest) {
+    return authMiddleware(to, from, next)
+  }
+  next()
+})
 export default router
