@@ -47,7 +47,7 @@ const formClass = computed(() => {
 </script>
 
 <template>
-  <div :class="formClass">
+  <div :class="formClass" class="mb-3">
     <input
       v-model="computedValue"
       :type="inputType"

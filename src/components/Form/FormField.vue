@@ -1,6 +1,5 @@
 <script setup>
-import { computed, ref, onMounted, onBeforeUnmount } from "vue";
-import { useMainStore } from "@/stores/main";
+import { computed, ref, onMounted } from "vue";
 
 const props = defineProps({
   name: {
@@ -47,6 +46,10 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  labelBold: {
+    type: Boolean,
+    default: false
+  },
   help: {
     type: String,
     default: null,
@@ -54,7 +57,6 @@ const props = defineProps({
   required: Boolean,
   borderless: Boolean,
   transparent: Boolean,
-  ctrlKFocus: Boolean,
 });
 
 const emit = defineEmits(["update:modelValue", "setRef"]);
@@ -87,8 +89,6 @@ const controlIconH = computed(() =>
   props.type === "textarea" ? "h-full" : "h-12"
 );
 
-const mainStore = useMainStore();
-
 const selectEl = ref(null);
 
 const textareaEl = ref(null);
@@ -105,36 +105,12 @@ onMounted(() => {
   }
 });
 
-if (props.ctrlKFocus) {
-  const fieldFocusHook = (e) => {
-    if (e.ctrlKey && e.key === "k") {
-      e.preventDefault();
-      inputEl.value.focus();
-    } else if (e.key === "Escape") {
-      inputEl.value.blur();
-    }
-  };
-
-  onMounted(() => {
-    if (!mainStore.isFieldFocusRegistered) {
-      window.addEventListener("keydown", fieldFocusHook);
-      mainStore.isFieldFocusRegistered = true;
-    } else {
-      console.error('Duplicate field focus event')
-    }
-  });
-
-  onBeforeUnmount(() => {
-    window.removeEventListener("keydown", fieldFocusHook);
-    mainStore.isFieldFocusRegistered = false;
-  });
-}
 </script>
 
 
 <template>
-  <div class="position-relative">
-    <label v-if="label" :for="labelFor" class="form-label fw-bold mb-2">{{
+  <div class="position-relative form-element mb-3">
+    <label v-if="label" :for="labelFor" class="form-label  mb-2" :class="{ 'fw-bold': labelBold }">{{
         label
       }}</label>
     <select

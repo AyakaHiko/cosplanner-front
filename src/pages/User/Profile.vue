@@ -2,20 +2,22 @@
 import UserAvatar from "@/components/User/UserAvatar.vue";
 import StatisticItem from "@/components/User/StatisticItem.vue";
 import UserBio from "@/components/User/UserBio.vue";
-
+import { useUserStore } from "@/stores/user";
+const userStore = useUserStore();
+const user = userStore.user;
 </script>
 
 <template>
   <div class="w-100 justify-content-center d-flex">
   <div class="card w-50 mt-3 d-flex flex-column">
     <div class="user-header">
-      <UserAvatar username="asd"/>
+      <UserAvatar :username="user.name" :avatar-path="user.avatar_path"/>
       <div class="statistics-bar">
         <StatisticItem name="Cosplays" :count=2 link="/cosplays"/>
         <StatisticItem name="Cosplans" :count=124 link="/cosplans"/>
       </div>
     </div>
-    <div class="username">Username geg</div>
+    <div class="username">{{ user.name }}</div>
     <UserBio/>
   </div>
   </div>

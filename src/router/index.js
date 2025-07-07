@@ -27,12 +27,14 @@ const routes = [
       {
         path: 'profile',
         name: 'profile',
-        component: () => import('@/pages/User/Profile.vue')
+        component: () => import('@/pages/User/Profile.vue'),
+        meta: { requiresAuth: true }
       },
       {
         path: 'settings',
         name: 'settings',
-        component: () => import('@/pages/User/Settings.vue')
+        component: () => import('@/pages/User/Settings.vue'),
+        meta: { requiresAuth: true }
       }
     ]
   }
@@ -42,9 +44,6 @@ const router = createRouter({
   routes
 })
 router.beforeEach((to, from, next) => {
-  if (to.meta.requiresGuest) {
     return authMiddleware(to, from, next)
-  }
-  next()
 })
 export default router

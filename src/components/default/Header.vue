@@ -2,10 +2,14 @@
 import {useAuthStore} from "@/stores/auth.js";
 import {computed} from "vue";
 import { useUiStore } from "@/stores/ui";
+import {useUserStore} from "@/stores/user.js";
 
 const uiStore = useUiStore();
 const authStore = useAuthStore();
+const userStore = useUserStore();
 const isAuthenticated = computed(() => authStore.isAuthenticated)
+const user = computed(() => userStore.user);
+
 </script>
 
 <template>
@@ -28,7 +32,7 @@ const isAuthenticated = computed(() => authStore.isAuthenticated)
           aria-expanded="false"
           data-bs-toggle="dropdown"
         >
-          My Profile
+          {{ user?.name || 'My Profile' }}
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <li><a class="dropdown-item" href="/profile">Profile</a></li>

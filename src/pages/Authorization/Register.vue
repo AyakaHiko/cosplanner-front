@@ -1,5 +1,7 @@
 <script setup>
 import {useAuthStore} from "@/stores/auth.js";
+import FormControl from "@/components/Form/FormControl.vue";
+import FormField from "@/components/Form/FormField.vue";
 const authStore = useAuthStore();
 const handleRegister = (event) => {
   event.preventDefault();
@@ -12,53 +14,46 @@ const handleRegister = (event) => {
 </script>
 <template>
   <div class="auth-container">
-    <form class="w-50" @submit.prevent="handleRegister">
-      <div class="form-group">
-        <label for="register-name" class="form-label">Account Name</label>
-        <input
-          name="name"
-          value="admin"
-          class="form-control"
-          id="register-name"
-          type="text"
-          placeholder="Account Name"
-        >
-      </div>
-      <div class="form-group">
-        <label for="register-email" class="form-label">Email Address</label>
-        <input
-          name="email"
-          value="a@dmin.com"
-          class="form-control"
-          id="register-email"
-          type="email"
-          placeholder="Email Address"
-        >
-      </div>
-      <div class="form-group">
-        <label for="register-password" class="form-label">Password</label>
-        <input
-          name="password"
-          value="qwe.123rty"
-          class="form-control"
-          id="register-password"
-          type="password"
-          placeholder="Password"
-        >
-      </div>
-      <div class="form-group">
-        <label for="register-password-confirmation" class="form-label">Confirm Password</label>
-        <input
-          name="password_confirmation"
-          value="qwe.123rty"
-          class="form-control"
-          id="register-password-confirmation"
-          type="password"
-          placeholder="Confirm Password"
-        >
-      </div>
-      <input type="submit" class="btn btn-light mt-2" value="Register">
-    </form>
+    <FormControl
+      class="w-50"
+      @submit="handleRegister"
+      submitText="Register"
+      :bordered="true"
+    >
+      <FormField
+        required
+        name="name"
+        type="text"
+        label="Account Name"
+        placeholder="Account Name"
+        :model-value="'admin'"
+      />
+      <FormField
+        required
+        name="email"
+        type="email"
+        label="Email Address"
+        placeholder="Email Address"
+        :model-value="'a@dmin.com'"
+      />
+      <FormField
+        required
+        name="password"
+        type="password"
+        label="Password"
+        placeholder="Password"
+        :model-value="'qwe.123rty'"
+      />
+      <FormField
+        required
+        name="password_confirmation"
+        type="password"
+        label="Confirm Password"
+        placeholder="Confirm Password"
+        :model-value="'qwe.123rty'"
+      />
+    </FormControl>
+
   </div>
 </template>
 
