@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { watch, ref } from 'vue';
 import { createAvatar } from '@dicebear/core';
 import { lorelei } from '@dicebear/collection';
 
@@ -22,19 +22,20 @@ const props = defineProps({
 
 const avatarUri = ref('');
 
-onMounted(() => {
-  if(props.avatarPath)
-  {
+const updateAvatar = () => {
+  if(props.avatarPath) {
     avatarUri.value = `${AWS_URL}/${props.avatarPath}`;
-  }
-  else {
+  } else {
     avatarUri.value = createAvatar(lorelei, {
       size: props.size,
-      seed: props.username,
+      seed: props.username || 'default',
       backgroundColor: ["b6e3f4", "c0aede", "d1d4f9"]
     }).toDataUri();
   }
-});
+};
+
+updateAvatar();
+watch([() => props.avatarPath, () => props.username], updateAvatar);
 </script>
 
 <template>

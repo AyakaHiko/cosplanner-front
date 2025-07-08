@@ -3,8 +3,10 @@ import UserAvatar from "@/components/User/UserAvatar.vue";
 import StatisticItem from "@/components/User/StatisticItem.vue";
 import UserBio from "@/components/User/UserBio.vue";
 import { useUserStore } from "@/stores/user";
+import {storeToRefs} from "pinia";
 const userStore = useUserStore();
-const user = userStore.user;
+const { user } = storeToRefs(userStore);
+
 </script>
 
 <template>
