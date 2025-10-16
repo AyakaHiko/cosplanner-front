@@ -36,6 +36,7 @@ const user = computed(() => userStore.user);
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <li><a class="dropdown-item" href="/profile">Profile</a></li>
+          <li><a class="dropdown-item" href="/cosplays">Cosplays</a></li>
           <li><a class="dropdown-item" href="/settings">Settings</a></li>
           <li><a class="dropdown-item" href="#" @click="authStore.logout">Log Out</a></li>
         </ul>
