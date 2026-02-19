@@ -1,5 +1,7 @@
+import { TokenStorage } from '@/utils/tokenStorage.js';
+
 export default function authMiddleware(to, from, next) {
-  const isAuthenticated = localStorage.getItem('token') || sessionStorage.getItem('token');
+  const isAuthenticated = Boolean(TokenStorage.getToken());
 
   if (to.meta.requiresAuth && !isAuthenticated) {
     return next({ name: 'login', query: { redirect: to.fullPath } });

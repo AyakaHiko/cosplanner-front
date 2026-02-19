@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { useUserStore } from './user';
+import { TokenStorage } from '@/utils/tokenStorage.js';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -9,7 +10,7 @@ export const useAuthStore = defineStore('auth', {
 
   actions: {
     async init() {
-      const savedToken = localStorage.getItem('token') || sessionStorage.getItem('token');
+      const savedToken = TokenStorage.getToken();
       if (savedToken) {
         this.token = savedToken;
         this.isAuthenticated = true;
@@ -36,11 +37,7 @@ export const useAuthStore = defineStore('auth', {
         }
 
         this.token = data.access_token;
-        if (credentials.remember) {
-          localStorage.setItem('token', this.token);
-        } else {
-          sessionStorage.setItem('token', this.token);
-        }
+        TokenStorage.setToken(this.token, Boolean(credentials.remember));
         this.isAuthenticated = true;
 
         const userStore = useUserStore();
@@ -49,8 +46,7 @@ export const useAuthStore = defineStore('auth', {
       } catch (e) {
         console.error('Login error:', e.message);
         this.token = null;
-        sessionStorage.removeItem('token');
-        localStorage.removeItem('token');
+        TokenStorage.removeToken();
         this.isAuthenticated = false;
         throw e;
       }
@@ -80,8 +76,7 @@ export const useAuthStore = defineStore('auth', {
           email: null
         };
         this.token = null;
-        sessionStorage.removeItem('token');
-        localStorage.removeItem('token');
+        TokenStorage.removeToken();
         this.isAuthenticated = false;
       }
     }

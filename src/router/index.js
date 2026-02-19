@@ -31,8 +31,8 @@ const routes = [
         meta: { requiresAuth: true }
       },
       {
-        path: 'planner',
-        name: 'planner',
+        path: 'cosplans',
+        name: 'cosplans',
         component: () => import('@/pages/Cosplays/Planner.vue'),
         meta: { requiresAuth: true }
       },

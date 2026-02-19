@@ -2,24 +2,36 @@
 import FormControl from "@/components/Form/FormControl.vue";
 import FormField from "@/components/Form/FormField.vue";
 import { useUserStore } from "@/stores/user";
-import {computed, ref} from "vue";
+import { computed, ref, reactive, watch } from "vue";
 import FormFileInput from "@/components/Form/FormFileInput.vue";
 
 const userStore = useUserStore();
 const user = computed(() => userStore.user);
-const selectedFile = ref<File|null>(null);
-const handleSubmit = (event) => {
-  event.preventDefault();
-  const form = event.target;
 
+// Reactive form populated from store
+const form = reactive({
+  name: "",
+  email: "",
+});
+
+watch(user, (val) => {
+  if (val) {
+    form.name = (val as any).name ?? "";
+    form.email = (val as any).email ?? "";
+  }
+}, { immediate: true });
+
+const selectedFile = ref<File | null>(null);
+
+const handleSubmit = () => {
   userStore.updateProfile({
-    name: form.name.value,
-    email: form.email.value,
+    name: form.name,
+    email: form.email,
     avatar: selectedFile.value
   });
 };
-const updateAvatar = (event) => {
-  event.preventDefault();
+
+const updateAvatar = () => {
   userStore.updateAvatar(selectedFile.value);
 }
 
@@ -30,7 +42,7 @@ const updateAvatar = (event) => {
 <FormControl
     :inline="true"
     submit-text="Update Picture"
-    @submit="updateAvatar">
+    @submit.prevent="updateAvatar">
     <FormFileInput
       label="Upload Image"
       accept="image/*"
@@ -40,17 +52,17 @@ const updateAvatar = (event) => {
       v-model="selectedFile"
     />
 </FormControl>
-  <FormControl @submit="handleSubmit" :inline="true"  class="w-50">
+  <FormControl @submit.prevent="handleSubmit" :inline="true"  class="w-50">
 
     <FormField
+      v-model="form.name"
       required
-      :model-value=user.name
       name="name"
       label="Username"
     />
     <FormField
+      v-model="form.email"
       required
-      :model-value=user.email
       name="email"
       type="email"
       label="Email"

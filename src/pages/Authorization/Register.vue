@@ -1,64 +1,71 @@
 <script setup>
-import {useAuthStore} from "@/stores/auth.js";
+import { reactive } from 'vue';
+import { useAuthStore } from "@/stores/auth.js";
 import FormControl from "@/components/Form/FormControl.vue";
 import FormField from "@/components/Form/FormField.vue";
-const authStore = useAuthStore();
-const handleRegister = (event) => {
-  event.preventDefault();
-  const formData = new FormData(event.target);
-  const data = Object.fromEntries(formData.entries());
-  console.log(data);
-  authStore.register(data);
-};
 
+const authStore = useAuthStore();
+
+// Reactive form state
+const form = reactive({
+  name: 'admin',
+  email: 'a@dmin.com',
+  password: 'qwe.123rty',
+  password_confirmation: 'qwe.123rty',
+});
+
+const handleRegister = async () => {
+  try {
+    await authStore.register({ ...form });
+  } catch (e) {
+    console.error('Register failed:', e);
+  }
+};
 </script>
 <template>
   <div class="auth-container">
     <FormControl
       class="w-50"
-      @submit="handleRegister"
+      @submit.prevent="handleRegister"
       submitText="Register"
       :bordered="true"
     >
       <FormField
+        v-model="form.name"
         required
         name="name"
         type="text"
         label="Account Name"
         placeholder="Account Name"
-        :model-value="'admin'"
       />
       <FormField
+        v-model="form.email"
         required
         name="email"
         type="email"
         label="Email Address"
         placeholder="Email Address"
-        :model-value="'a@dmin.com'"
       />
       <FormField
+        v-model="form.password"
         required
         name="password"
         type="password"
         label="Password"
         placeholder="Password"
-        :model-value="'qwe.123rty'"
       />
       <FormField
+        v-model="form.password_confirmation"
         required
         name="password_confirmation"
         type="password"
         label="Confirm Password"
         placeholder="Confirm Password"
-        :model-value="'qwe.123rty'"
       />
     </FormControl>
 
   </div>
 </template>
 
-
-
 <style scoped>
-
 </style>

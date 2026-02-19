@@ -1,20 +1,23 @@
 <script setup>
-
-import {useAuthStore} from "@/stores/auth.js";
-import {useRouter} from "vue-router";
+import { reactive } from 'vue';
+import { useAuthStore } from "@/stores/auth.js";
+import { useRouter } from "vue-router";
 import FormControl from "@/components/Form/FormControl.vue";
 import FormField from "@/components/Form/FormField.vue";
 import FormCheckRadio from "@/components/Form/FormCheckRadio.vue";
 
 const authStore = useAuthStore();
 const router = useRouter();
-const handleLogin = async (event) => {
-  event.preventDefault();
-  const formData = new FormData(event.target);
-  const data = Object.fromEntries(formData.entries());
 
+const form = reactive({
+  email: '',
+  password: '',
+  remember: true,
+});
+
+const handleLogin = async () => {
   try {
-    const success = await authStore.login(data);
+    const success = await authStore.login({ ...form });
     if (success) {
       await router.push('/profile');
     }
@@ -22,17 +25,17 @@ const handleLogin = async (event) => {
     console.error('Login failed:', error);
   }
 };
-
 </script>
 <template>
   <div class="auth-container">
     <FormControl
       class="w-50"
-      @submit="handleLogin"
+      @submit.prevent="handleLogin"
       submitText="Log In"
       :bordered="true"
     >
       <FormField
+        v-model="form.email"
         required
         name="email"
         type="email"
@@ -40,6 +43,7 @@ const handleLogin = async (event) => {
         placeholder="Email Address"
       />
       <FormField
+        v-model="form.password"
         required
         name="password"
         type="password"
@@ -47,11 +51,11 @@ const handleLogin = async (event) => {
         placeholder="Password"
       />
       <FormCheckRadio
+        v-model="form.remember"
         :input-value="true"
         name="remember"
         label="Remember Me"
       />
     </FormControl>
-
   </div>
 </template>

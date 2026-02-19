@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import {useAuthStore} from "@/stores/auth.js";
+import { TokenStorage } from "@/utils/tokenStorage.js";
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -17,7 +18,7 @@ export const useUserStore = defineStore('user', {
         const response = await fetch('/api/profile', {
           headers: {
             'Accept': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`
+            'Authorization': TokenStorage.getAuthHeader() || ''
           }
         });
         if (response.status === 401) {
@@ -46,7 +47,7 @@ export const useUserStore = defineStore('user', {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`
+            'Authorization': TokenStorage.getAuthHeader() || ''
           },
           body: JSON.stringify(profileData)
         });
@@ -72,7 +73,7 @@ export const useUserStore = defineStore('user', {
         const response = await fetch('/api/update-avatar', {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`
+            'Authorization': TokenStorage.getAuthHeader() || ''
           },
           body: formData
         });
@@ -103,7 +104,7 @@ export const useUserStore = defineStore('user', {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token') || sessionStorage.getItem('token')}`
+            'Authorization': TokenStorage.getAuthHeader() || ''
           },
           body: JSON.stringify({ password })
         });
