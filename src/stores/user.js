@@ -8,7 +8,7 @@ export const useUserStore = defineStore('user', {
       id: null,
       name: null,
       email: null,
-      avatar_path: null,
+      avatar: null,
     }
   }),
 
@@ -84,10 +84,10 @@ export const useUserStore = defineStore('user', {
           throw new Error(data.message || 'Failed to upload avatar');
         }
 
-        if (data.user?.avatar_path) {
+        if (data.user?.avatar) {
           this.user = {
             ...this.user,
-            avatar_path: data.user.avatar_path
+            avatar: data.user.avatar
           };
         }
 

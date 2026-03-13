@@ -15,7 +15,7 @@ const props = defineProps({
     default: 128
   },
   avatarPath: {
-    type: String,
+    type: [String, Object],
     default: ''
   }
 });
@@ -23,8 +23,10 @@ const props = defineProps({
 const avatarUri = ref('');
 
 const updateAvatar = () => {
-  if(props.avatarPath) {
+  if(props.avatarPath && typeof props.avatarPath === 'string') {
     avatarUri.value = `${AWS_URL}/${props.avatarPath}`;
+  } else if (props.avatarPath && typeof props.avatarPath === 'object' && props.avatarPath.path) {
+    avatarUri.value = `${AWS_URL}/${props.avatarPath.path}`;
   } else {
     avatarUri.value = createAvatar(lorelei, {
       size: props.size,

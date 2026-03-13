@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import FormControl from "@/components/Form/FormControl.vue";
-import FormField from "@/components/Form/FormField.vue";
 import { useUserStore } from "@/stores/user";
 import { computed, ref, reactive, watch } from "vue";
-import FormFileInput from "@/components/Form/FormFileInput.vue";
 import { useToast } from "vue-toastification";
+import VueCropper from 'vue-cropperjs';
+import 'cropperjs/dist/cropper.css';
 
 const userStore = useUserStore();
 const toast = useToast();
@@ -27,14 +26,46 @@ const selectedFile = ref<File | null>(null);
 const profileLoading = ref(false);
 const avatarLoading = ref(false);
 
+const cropperRef = ref(null);
+const imageInput = ref(null);
+const imgSrc = ref('');
+const isModalOpen = ref(false);
+
+const setImage = (e: any) => {
+  const file = e.target.files[0];
+  if (!file?.type?.includes('image/')) {
+    toast.error('Please select an image file');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (event: any) => {
+    imgSrc.value = event.target.result;
+    isModalOpen.value = true;
+  };
+  reader.readAsDataURL(file);
+};
+
+const getCroppedImage = () => {
+  if (!cropperRef.value) return;
+  const canvas = (cropperRef.value as any).getCroppedCanvas();
+  if (!canvas) return;
+  canvas.toBlob((blob: any) => {
+    if (!blob) return;
+    selectedFile.value = new File([blob], 'avatar.jpg', { type: 'image/jpeg' });
+    imgSrc.value = '';
+    isModalOpen.value = false;
+    toast.success("Image cropped successfully");
+  }, 'image/jpeg');
+};
+
 const handleSubmit = async () => {
   profileLoading.value = true;
   try {
-    await userStore.updateProfile({
+    const response = await userStore.updateProfile({
       name: form.name,
       email: form.email,
     });
-    toast.success("Profile updated successfully");
+    toast.success(response.message || "Profile updated successfully");
   } catch (error: any) {
     toast.error(error.message || "Failed to update profile");
   } finally {
@@ -50,9 +81,12 @@ const updateAvatar = async () => {
 
   avatarLoading.value = true;
   try {
-    await userStore.updateAvatar(selectedFile.value);
+    const response = await userStore.updateAvatar(selectedFile.value);
     selectedFile.value = null;
-    toast.success("Avatar updated successfully");
+    if (imageInput.value) {
+      (imageInput.value as any).value = '';
+    }
+    toast.success(response.message || "Avatar updated successfully");
   } catch (error: any) {
     toast.error(error.message || "Failed to update avatar");
   } finally {
@@ -63,37 +97,111 @@ const updateAvatar = async () => {
 </script>
 
 <template>
-  <div class="card justify-content-center align-items-center m-3">
-<FormControl
-    :inline="true"
-    submit-text="Update Picture"
-    :loading="avatarLoading"
-    @submit.prevent="updateAvatar">
-    <FormFileInput
-      label="Upload Image"
-      accept="image/*"
-      :rounded-preview = "true"
-      :modal-crop = "true"
-      required
-      v-model="selectedFile"
-    />
-</FormControl>
-  <FormControl @submit.prevent="handleSubmit" :inline="true" :loading="profileLoading" class="w-50">
+  <div class="card justify-content-center align-items-center m-3 p-4">
+    <CForm
+      @submit.prevent="updateAvatar"
+      class="w-50 mb-4 border-bottom pb-4"
+    >
+      <div class="mb-3">
+        <CFormLabel>Upload Image</CFormLabel>
+        <CFormInput
+          ref="imageInput"
+          type="file"
+          accept="image/*"
+          @change="setImage"
+          required
+        />
+      </div>
 
-    <FormField
-      v-model="form.name"
-      required
-      name="name"
-      label="Username"
-    />
-    <FormField
-      v-model="form.email"
-      required
-      name="email"
-      type="email"
-      label="Email"
-    />
-  </FormControl>
+      <div v-if="selectedFile" class="mb-3 text-center">
+        <img
+          :src="URL.createObjectURL(selectedFile)"
+          alt="Preview"
+          class="img-thumbnail rounded-circle"
+          style="width: 150px; height: 150px; object-fit: cover;"
+        />
+      </div>
+
+      <CButton
+        type="submit"
+        color="secondary"
+        variant="outline"
+        :disabled="avatarLoading"
+      >
+        <CSpinner v-if="avatarLoading" component="span" size="sm" aria-hidden="true" class="me-2"/>
+        Update Picture
+      </CButton>
+    </CForm>
+
+    <CForm
+      @submit.prevent="handleSubmit"
+      class="w-50"
+    >
+      <div class="mb-3">
+        <CFormLabel for="name">Username</CFormLabel>
+        <CFormInput
+          v-model="form.name"
+          id="name"
+          required
+        />
+      </div>
+
+      <div class="mb-3">
+        <CFormLabel for="email">Email</CFormLabel>
+        <CFormInput
+          v-model="form.email"
+          id="email"
+          type="email"
+          required
+        />
+      </div>
+
+      <CButton
+        type="submit"
+        color="secondary"
+        variant="outline"
+        :disabled="profileLoading"
+      >
+        <CSpinner v-if="profileLoading" component="span" size="sm" aria-hidden="true" class="me-2"/>
+        Save
+      </CButton>
+    </CForm>
+
+    <CModal
+      :visible="isModalOpen"
+      @close="isModalOpen = false"
+      size="lg"
+    >
+      <CModalHeader>
+        <CModalTitle>Crop Image</CModalTitle>
+      </CModalHeader>
+      <CModalBody>
+        <div style="height: 400px; max-width: 100%; overflow: hidden;">
+          <vue-cropper
+            ref="cropperRef"
+            :src="imgSrc"
+            :aspect-ratio="1"
+            :view-mode="1"
+            :auto-crop-area="1"
+            :movable="true"
+            :rotatable="true"
+            :scalable="true"
+            :zoomable="true"
+            :background="true"
+            :responsive="true"
+            img-style="max-width: 100%; max-height: 400px;"
+          />
+        </div>
+      </CModalBody>
+      <CModalFooter>
+        <CButton color="secondary" @click="isModalOpen = false">
+          Cancel
+        </CButton>
+        <CButton color="primary" @click="getCroppedImage">
+          Save
+        </CButton>
+      </CModalFooter>
+    </CModal>
   </div>
 </template>
 

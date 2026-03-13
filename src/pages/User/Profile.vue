@@ -13,7 +13,7 @@ const { user } = storeToRefs(userStore);
   <div class="w-100 justify-content-center d-flex">
   <div class="card w-50 mt-3 d-flex flex-column">
     <div class="user-header">
-      <UserAvatar :username="user.name" :avatar-path="user.avatar_path"/>
+      <UserAvatar :username="user.name" :avatar-path="user.avatar"/>
       <div class="statistics-bar">
         <StatisticItem name="Cosplays" :count=2 link="/cosplays"/>
         <StatisticItem name="Cosplans" :count=124 link="/cosplans"/>
