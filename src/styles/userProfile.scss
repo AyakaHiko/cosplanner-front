@@ -1,4 +1,4 @@
-@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+@import "../../node_modules/bootstrap/scss/bootstrap";
 
 .card{
   max-width: 50rem;
@@ -11,12 +11,15 @@
   width: 100%;
 }
 .avatar{
-  display: inline-flex;
+  display: inline-block;
+  width: fit-content;
+  height: fit-content;
 }
 .avatar img{
-  border-radius: 50%;
+  display: block;
   width: 6rem;
   height: 6rem;
+  border-radius: 50%;
   object-fit: cover;
 }
 .username{

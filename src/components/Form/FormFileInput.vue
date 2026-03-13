@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import VueCropper from 'vue-cropperjs';
 import 'cropperjs/dist/cropper.css';
 
@@ -40,6 +40,15 @@ const imageInput = ref(null);
 const imgSrc = ref('');
 const cropImg = ref('');
 const isModalOpen = ref(false);
+
+watch(() => props.modelValue, (newVal) => {
+  if (newVal === null) {
+    cropImg.value = '';
+    if (imageInput.value) {
+      imageInput.value.value = '';
+    }
+  }
+});
 
 const setImage = (e) => {
   const file = e.target.files[0];

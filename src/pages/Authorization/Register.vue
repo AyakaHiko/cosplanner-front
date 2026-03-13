@@ -1,10 +1,10 @@
 <script setup>
 import { reactive } from 'vue';
 import { useAuthStore } from "@/stores/auth.js";
-import FormControl from "@/components/Form/FormControl.vue";
-import FormField from "@/components/Form/FormField.vue";
+import { useRouter } from "vue-router";
 
 const authStore = useAuthStore();
+const router = useRouter();
 
 // Reactive form state
 const form = reactive({
@@ -16,56 +16,77 @@ const form = reactive({
 
 const handleRegister = async () => {
   try {
-    await authStore.register({ ...form });
+    const success = await authStore.register({ ...form });
+    if (success) {
+      await router.push('/profile');
+    }
   } catch (e) {
     console.error('Register failed:', e);
   }
 };
 </script>
 <template>
-  <div class="auth-container">
-    <FormControl
-      class="w-50"
-      @submit.prevent="handleRegister"
-      submitText="Register"
-      :bordered="true"
-    >
-      <FormField
-        v-model="form.name"
-        required
-        name="name"
-        type="text"
-        label="Account Name"
-        placeholder="Account Name"
-      />
-      <FormField
-        v-model="form.email"
-        required
-        name="email"
-        type="email"
-        label="Email Address"
-        placeholder="Email Address"
-      />
-      <FormField
-        v-model="form.password"
-        required
-        name="password"
-        type="password"
-        label="Password"
-        placeholder="Password"
-      />
-      <FormField
-        v-model="form.password_confirmation"
-        required
-        name="password_confirmation"
-        type="password"
-        label="Confirm Password"
-        placeholder="Confirm Password"
-      />
-    </FormControl>
-
+  <div class="bwrapper min-vh-100 d-flex flex-row align-items-center">
+    <CContainer>
+      <CRow class="justify-content-center">
+        <CCol :md="9" :lg="7" :xl="6">
+          <CCard class="mx-4">
+            <CCardBody class="p-4">
+              <CForm @submit.prevent="handleRegister">
+                <h1>Register</h1>
+                <p class="text-body-secondary">Create your account</p>
+                <CInputGroup class="mb-3">
+                  <CInputGroupText>
+                    <CIcon icon="cil-user" />
+                  </CInputGroupText>
+                  <CFormInput
+                    v-model="form.name"
+                    placeholder="Username"
+                    autocomplete="username"
+                    required
+                  />
+                </CInputGroup>
+                <CInputGroup class="mb-3">
+                  <CInputGroupText>@</CInputGroupText>
+                  <CFormInput
+                    v-model="form.email"
+                    placeholder="Email"
+                    autocomplete="email"
+                    required
+                  />
+                </CInputGroup>
+                <CInputGroup class="mb-3">
+                  <CInputGroupText>
+                    <CIcon icon="cil-lock-locked" />
+                  </CInputGroupText>
+                  <CFormInput
+                    v-model="form.password"
+                    type="password"
+                    placeholder="Password"
+                    autocomplete="new-password"
+                    required
+                  />
+                </CInputGroup>
+                <CInputGroup class="mb-4">
+                  <CInputGroupText>
+                    <CIcon icon="cil-lock-locked" />
+                  </CInputGroupText>
+                  <CFormInput
+                    v-model="form.password_confirmation"
+                    type="password"
+                    placeholder="Repeat password"
+                    autocomplete="new-password"
+                    required
+                  />
+                </CInputGroup>
+                <div class="d-grid">
+                  <CButton type="submit" color="success">Create Account</CButton>
+                </div>
+              </CForm>
+            </CCardBody>
+          </CCard>
+        </CCol>
+      </CRow>
+    </CContainer>
   </div>
 </template>
-
-<style scoped>
-</style>

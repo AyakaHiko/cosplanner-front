@@ -1,20 +1,19 @@
-<script setup lang="ts">
-import Header from "@/components/default/Header.vue";
-import Footer from "@/components/default/Footer.vue";
-
+<script setup>
+import { CContainer } from '@coreui/vue'
+import AppFooter from '@/components/AppFooter.vue'
+import AppHeader from '@/components/AppHeader.vue'
 </script>
 
 <template>
-  <div class="main-layout">
-    <div class="header">
-      <Header/>
-    </div>
-    <main>
-      <router-view/>
-    </main>
-    <div class="footer">
-      <Footer/>
+  <div>
+    <div class="wrapper d-flex flex-column min-vh-100">
+      <AppHeader />
+      <div class="body flex-grow-1">
+        <CContainer class="px-4" lg>
+          <router-view />
+        </CContainer>
+      </div>
+      <AppFooter />
     </div>
   </div>
 </template>
-<style src="@/assets/defaultLayout.scss"></style>

@@ -25,5 +25,5 @@ const { user } = storeToRefs(userStore);
   </div>
 </template>
 
-<style src="@/assets/userProfile.scss"/>
+<style src="@/styles/userProfile.scss"/>
 

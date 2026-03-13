@@ -24,6 +24,10 @@ const props = defineProps({
   bordered: {
     type: Boolean,
     default: false
+  },
+  loading: {
+    type: Boolean,
+    default: false
   }
 })
 </script>
@@ -31,7 +35,10 @@ const props = defineProps({
 <template>
   <form :action="action" :method="method" :class="{ 'form-inline': inline, 'card': bordered }" class="form p-4">
     <slot />
-    <button type="submit" class="btn btn-outline-secondary">{{ submitText }}</button>
-    <button v-if="reset" type="reset" class="btn btn-outline-secondary">Reset</button>
+    <button type="submit" class="btn btn-outline-secondary" :disabled="loading">
+      <span v-if="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      {{ submitText }}
+    </button>
+    <button v-if="reset" type="reset" class="btn btn-outline-secondary" :disabled="loading">Reset</button>
   </form>
 </template>
