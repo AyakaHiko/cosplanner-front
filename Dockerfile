@@ -11,4 +11,10 @@ EXPOSE 4173
 
 RUN npm run build
 
-CMD ["npm", "run", "preview"]
+FROM nginx:alpine
+
+COPY --from=builder /front/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
