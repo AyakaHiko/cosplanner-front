@@ -12,32 +12,32 @@ const routes = [
         component: () => import('@/pages/Home.vue')
       },
       {
-        path: 'login',
+        path: '/login',
         name: 'login',
         component: () => import('@/pages/Authorization/Login.vue'),
         meta: { requiresGuest: true }
 
       },
       {
-        path: 'register',
+        path: '/register',
         name: 'register',
         component: () => import('@/pages/Authorization/Register.vue'),
         meta: { requiresGuest: true }
       },
       {
-        path: 'profile',
+        path: '/profile',
         name: 'profile',
         component: () => import('@/pages/User/Profile.vue'),
         meta: { requiresAuth: true }
       },
       {
-        path: 'cosplans',
+        path: '/cosplans',
         name: 'cosplans',
         component: () => import('@/pages/Cosplays/Planner.vue'),
         meta: { requiresAuth: true }
       },
       {
-        path: 'settings',
+        path: '/settings',
         name: 'settings',
         component: () => import('@/pages/User/Settings.vue'),
         meta: { requiresAuth: true }
