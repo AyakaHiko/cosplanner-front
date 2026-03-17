@@ -7,6 +7,16 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 // https://vite.dev/config/
 export default defineConfig({
   base: '/',
+  server: {
+    host: true,
+    port: 5173,
+    proxy: {
+      "/api": {
+        target: "http://cosplanner.backend:8000",
+        changeOrigin: true
+      }
+    },
+  },
   plugins: [
     vue(),
     vueDevTools(),
