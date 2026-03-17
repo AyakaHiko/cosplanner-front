@@ -2,6 +2,8 @@ import { defineStore } from 'pinia';
 import { useUserStore } from './user';
 import { TokenStorage } from '@/utils/tokenStorage.js';
 
+const API = import.meta.env.VITE_API_URL || "";
+
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     token: null,
@@ -21,7 +23,7 @@ export const useAuthStore = defineStore('auth', {
 
     async login(credentials) {
       try {
-        const response = await fetch('/api/login', {
+        const response = await fetch(`${API}/api/login`, {
           method: 'POST',
           body: JSON.stringify(credentials),
           headers: {
@@ -52,9 +54,42 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
+    async register(credentials) {
+      try {
+        const response = await fetch(`${API}/api/register`, {
+          method: 'POST',
+          body: JSON.stringify(credentials),
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include'
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Registration failed');
+        }
+
+        this.token = data.access_token;
+        TokenStorage.setToken(this.token, false);
+        this.isAuthenticated = true;
+
+        const userStore = useUserStore();
+        await userStore.fetchProfile();
+        return data;
+      } catch (e) {
+        console.error('Registration error:', e.message);
+        this.token = null;
+        TokenStorage.removeToken();
+        this.isAuthenticated = false;
+        throw e;
+      }
+    },
+
     async logout() {
       try {
-        const response = await fetch('/api/logout', {
+        const response = await fetch(`${API}/api/logout`, {
           method: 'POST',
           credentials: 'include',
           headers: {

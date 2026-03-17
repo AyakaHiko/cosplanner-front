@@ -2,6 +2,8 @@ import { defineStore } from 'pinia';
 import {useAuthStore} from "@/stores/auth.js";
 import { TokenStorage } from "@/utils/tokenStorage.js";
 
+const API = import.meta.env.VITE_API_URL || "";
+
 export const useUserStore = defineStore('user', {
   state: () => ({
     user: {
@@ -15,7 +17,7 @@ export const useUserStore = defineStore('user', {
   actions: {
     async fetchProfile() {
       try {
-        const response = await fetch('/api/profile', {
+        const response = await fetch(`${API}/api/profile`, {
           headers: {
             'Accept': 'application/json',
             'Authorization': TokenStorage.getAuthHeader() || ''
@@ -43,7 +45,7 @@ export const useUserStore = defineStore('user', {
 
     async updateProfile(profileData) {
       try {
-        const response = await fetch('/api/profile', {
+        const response = await fetch(`${API}/api/profile`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -68,9 +70,8 @@ export const useUserStore = defineStore('user', {
     async updateAvatar(avatarData) {
       const formData = new FormData();
       formData.append('image', avatarData);
-
       try {
-        const response = await fetch('/api/update-avatar', {
+        const response = await fetch(`${API}/api/update-avatar`, {
           method: 'POST',
           headers: {
             'Authorization': TokenStorage.getAuthHeader() || ''
@@ -100,7 +101,7 @@ export const useUserStore = defineStore('user', {
 
     async deleteAccount(password) {
       try {
-        const response = await fetch('/api/profile', {
+        const response = await fetch(`${API}/api/profile`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
