@@ -12,6 +12,8 @@ export const useAuthStore = defineStore('auth', {
 
   actions: {
     async init() {
+      console.log(API)
+      console.log(import.meta.env)
       const savedToken = TokenStorage.getToken();
       if (savedToken) {
         this.token = savedToken;
