@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia';
 import { useUserStore } from './user';
 import { TokenStorage } from '@/utils/tokenStorage.js';
-
-const API = import.meta.env.VITE_API_URL || "";
+import { authService } from '@/services/api/authService.js';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -23,15 +22,7 @@ export const useAuthStore = defineStore('auth', {
 
     async login(credentials) {
       try {
-        const response = await fetch(`${API}/api/login`, {
-          method: 'POST',
-          body: JSON.stringify(credentials),
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          credentials: 'include'
-        });
-
+        const response = await authService.login(credentials);
         const data = await response.json();
 
         if (!response.ok) {
@@ -56,15 +47,7 @@ export const useAuthStore = defineStore('auth', {
 
     async register(credentials) {
       try {
-        const response = await fetch(`${API}/api/register`, {
-          method: 'POST',
-          body: JSON.stringify(credentials),
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          credentials: 'include'
-        });
-
+        const response = await authService.register(credentials);
         const data = await response.json();
 
         if (!response.ok) {
@@ -89,13 +72,7 @@ export const useAuthStore = defineStore('auth', {
 
     async logout() {
       try {
-        const response = await fetch(`${API}/api/logout`, {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Authorization': `Bearer ${this.token}`
-          }
-        });
+        const response = await authService.logout(this.token);
 
         if (!response.ok) {
           const data = await response.json();

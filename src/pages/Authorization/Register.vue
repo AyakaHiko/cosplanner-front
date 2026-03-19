@@ -1,29 +1,7 @@
 <script setup>
-import { reactive } from 'vue';
-import { useAuthStore } from "@/stores/auth.js";
-import { useRouter } from "vue-router";
+import { useAuth } from "@/composables/useAuth";
 
-const authStore = useAuthStore();
-const router = useRouter();
-
-// Reactive form state
-const form = reactive({
-  name: 'admin',
-  email: 'a@dmin.com',
-  password: 'qwe.123rty',
-  password_confirmation: 'qwe.123rty',
-});
-
-const handleRegister = async () => {
-  try {
-    const success = await authStore.register({ ...form });
-    if (success) {
-      await router.push('/profile');
-    }
-  } catch (e) {
-    console.error('Register failed:', e);
-  }
-};
+const { registerForm: form, handleRegister } = useAuth();
 </script>
 <template>
   <div class="bwrapper min-vh-100 d-flex flex-row align-items-center">

@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia';
 import {useAuthStore} from "@/stores/auth.js";
-import { TokenStorage } from "@/utils/tokenStorage.js";
-
-const API = import.meta.env.VITE_API_URL || "";
+import { userService } from "@/services/api/userService.js";
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -17,12 +15,7 @@ export const useUserStore = defineStore('user', {
   actions: {
     async fetchProfile() {
       try {
-        const response = await fetch(`${API}/api/profile`, {
-          headers: {
-            'Accept': 'application/json',
-            'Authorization': TokenStorage.getAuthHeader() || ''
-          }
-        });
+        const response = await userService.fetchProfile();
         if (response.status === 401) {
           const authStore = useAuthStore();
           await authStore.logout();
@@ -45,14 +38,7 @@ export const useUserStore = defineStore('user', {
 
     async updateProfile(profileData) {
       try {
-        const response = await fetch(`${API}/api/profile`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': TokenStorage.getAuthHeader() || ''
-          },
-          body: JSON.stringify(profileData)
-        });
+        const response = await userService.updateProfile(profileData);
 
         if (!response.ok) {
           const error = await response.json();
@@ -68,17 +54,8 @@ export const useUserStore = defineStore('user', {
       }
     },
     async updateAvatar(avatarData) {
-      const formData = new FormData();
-      formData.append('image', avatarData);
       try {
-        const response = await fetch(`${API}/api/update-avatar`, {
-          method: 'POST',
-          headers: {
-            'Authorization': TokenStorage.getAuthHeader() || ''
-          },
-          body: formData
-        });
-
+        const response = await userService.updateAvatar(avatarData);
         const data = await response.json();
 
         if (!response.ok) {
@@ -101,14 +78,7 @@ export const useUserStore = defineStore('user', {
 
     async deleteAccount(password) {
       try {
-        const response = await fetch(`${API}/api/profile`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': TokenStorage.getAuthHeader() || ''
-          },
-          body: JSON.stringify({ password })
-        });
+        const response = await userService.deleteAccount(password);
 
         if (!response.ok) {
           const error = await response.json();

@@ -1,99 +1,22 @@
 <script setup lang="ts">
-import { useUserStore } from "@/stores/user";
-import { computed, ref, reactive, watch } from "vue";
-import { useToast } from "vue-toastification";
+import { useUserSettings } from "@/composables/useUserSettings";
 import VueCropper from 'vue-cropperjs';
 import 'cropperjs/dist/cropper.css';
 
-const userStore = useUserStore();
-const toast = useToast();
-const user = computed(() => userStore.user);
-
-// Reactive form populated from store
-const form = reactive({
-  name: "",
-  email: "",
-});
-
-watch(user, (val) => {
-  if (val) {
-    form.name = (val as any).name ?? "";
-    form.email = (val as any).email ?? "";
-  }
-}, { immediate: true });
-
-const selectedFile = ref<File | null>(null);
-const profileLoading = ref(false);
-const avatarLoading = ref(false);
-
-const cropperRef = ref(null);
-const imageInput = ref(null);
-const imgSrc = ref('');
-const isModalOpen = ref(false);
-
-const setImage = (e: any) => {
-  const file = e.target.files[0];
-  if (!file?.type?.includes('image/')) {
-    toast.error('Please select an image file');
-    return;
-  }
-  const reader = new FileReader();
-  reader.onload = (event: any) => {
-    imgSrc.value = event.target.result;
-    isModalOpen.value = true;
-  };
-  reader.readAsDataURL(file);
-};
-
-const getCroppedImage = () => {
-  if (!cropperRef.value) return;
-  const canvas = (cropperRef.value as any).getCroppedCanvas();
-  if (!canvas) return;
-  canvas.toBlob((blob: any) => {
-    if (!blob) return;
-    selectedFile.value = new File([blob], 'avatar.jpg', { type: 'image/jpeg' });
-    imgSrc.value = '';
-    isModalOpen.value = false;
-    toast.success("Image cropped successfully");
-  }, 'image/jpeg');
-};
-
-const handleSubmit = async () => {
-  profileLoading.value = true;
-  try {
-    const response = await userStore.updateProfile({
-      name: form.name,
-      email: form.email,
-    });
-    toast.success(response.message || "Profile updated successfully");
-  } catch (error: any) {
-    toast.error(error.message || "Failed to update profile");
-  } finally {
-    profileLoading.value = false;
-  }
-};
-
-const updateAvatar = async () => {
-  if (!selectedFile.value) {
-    toast.warning("Please select an image first");
-    return;
-  }
-
-  avatarLoading.value = true;
-  try {
-    const response = await userStore.updateAvatar(selectedFile.value);
-    selectedFile.value = null;
-    if (imageInput.value) {
-      (imageInput.value as any).value = '';
-    }
-    toast.success(response.message || "Avatar updated successfully");
-  } catch (error: any) {
-    toast.error(error.message || "Failed to update avatar");
-  } finally {
-    avatarLoading.value = false;
-  }
-}
-
+const {
+  form,
+  profileLoading,
+  avatarLoading,
+  handleSubmit,
+  updateAvatar,
+  selectedFile,
+  cropperRef,
+  imageInput,
+  imgSrc,
+  isModalOpen,
+  setImage,
+  getCroppedImage
+} = useUserSettings();
 </script>
 
 <template>
