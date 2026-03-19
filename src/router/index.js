@@ -49,6 +49,12 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
+router.afterEach((to) => {
+  const page = String(to.name ?? "Cosplanner")
+
+  document.title =
+    page.charAt(0).toUpperCase() + page.slice(1) + " | Cosplanner"
+})
 router.beforeEach((to, from, next) => {
     return authMiddleware(to, from, next)
 })

@@ -4,6 +4,8 @@ import StatisticItem from "@/components/User/StatisticItem.vue";
 import UserBio from "@/components/User/UserBio.vue";
 import { useUserStore } from "@/stores/user";
 import {storeToRefs} from "pinia";
+import {CButton} from "@coreui/vue";
+import {cilPen} from "@coreui/icons";
 const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
 
@@ -19,7 +21,7 @@ const { user } = storeToRefs(userStore);
         <StatisticItem name="Cosplans" :count=124 link="/cosplans"/>
       </div>
     </div>
-    <div class="username">{{ user.name }}</div>
+    <div class="username">{{ user.name }}<CButton class="btn-sm" href="/settings"><CIcon :icon="cilPen" class=""/></CButton></div>
     <UserBio/>
   </div>
   </div>
