@@ -2,6 +2,7 @@
 import { useUserSettings } from "@/composables/useUserSettings";
 import VueCropper from 'vue-cropperjs';
 import 'cropperjs/dist/cropper.css';
+import {computed} from "vue";
 
 const {
   form,
@@ -17,6 +18,11 @@ const {
   setImage,
   getCroppedImage
 } = useUserSettings();
+
+const previewUrl = computed(() => {
+  if (!selectedFile.value) return null
+  return URL.createObjectURL(selectedFile.value)
+})
 </script>
 
 <template>
@@ -38,7 +44,7 @@ const {
 
       <div v-if="selectedFile" class="mb-3 text-center">
         <img
-          :src="URL.createObjectURL(selectedFile)"
+          :src="previewUrl"
           alt="Preview"
           class="img-thumbnail rounded-circle"
           style="width: 150px; height: 150px; object-fit: cover;"
