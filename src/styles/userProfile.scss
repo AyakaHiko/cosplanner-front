@@ -1,39 +1,67 @@
 @import "../../node_modules/bootstrap/scss/bootstrap";
 
-.card{
+.card {
   max-width: 50rem;
-  padding: 1rem;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.user-header{
+.user-header {
   display: flex;
+  flex-direction: row;
   align-items: center;
   width: 100%;
+  gap: 1rem;
+
+  @media (max-width: 576px) {
+    flex-direction: column;
+    text-align: center;
+  }
 }
-.avatar{
+
+.avatar {
   display: inline-block;
   width: fit-content;
   height: fit-content;
 }
-.avatar img{
+
+.avatar img {
   display: block;
   width: 6rem;
   height: 6rem;
   border-radius: 50%;
   object-fit: cover;
+
+  @media (max-width: 576px) {
+    width: 5rem;
+    height: 5rem;
+  }
 }
-.username{
-  font-size: 1.2rem;
+
+.username {
+  font-size: 1.25rem;
   font-weight: bold;
-  margin-top: 0.3rem;
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 576px) {
+    justify-content: center;
+  }
 }
+
 .statistics-bar {
   display: flex;
   gap: 2rem;
   align-items: center;
-  width: 100%;
-  justify-content: center;
-  height: 10%;
+  flex-grow: 1;
+  justify-content: space-around;
+
+  @media (max-width: 576px) {
+    width: 100%;
+    margin-top: 1rem;
+    gap: 1rem;
+  }
 }
 
 .statistic {

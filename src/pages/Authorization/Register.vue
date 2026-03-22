@@ -7,9 +7,9 @@ const { registerForm: form, handleRegister } = useAuth();
   <div class="bwrapper min-vh-100 d-flex flex-row align-items-center">
     <CContainer>
       <CRow class="justify-content-center">
-        <CCol :md="9" :lg="7" :xl="6">
-          <CCard class="mx-4">
-            <CCardBody class="p-4">
+        <CCol :md="10" :lg="8" :xl="6">
+          <CCard class="mx-0 mx-sm-4">
+            <CCardBody class="p-3 p-sm-4">
               <CForm @submit.prevent="handleRegister">
                 <h1>Register</h1>
                 <p class="text-body-secondary">Create your account</p>
@@ -58,7 +58,7 @@ const { registerForm: form, handleRegister } = useAuth();
                   />
                 </CInputGroup>
                 <div class="d-grid">
-                  <CButton type="submit" color="success">Create Account</CButton>
+                  <CButton type="submit" color="success" class="py-2">Create Account</CButton>
                 </div>
               </CForm>
             </CCardBody>

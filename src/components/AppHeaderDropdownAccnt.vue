@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useAuthStore } from '@/stores/auth.js'
 import { useUserStore } from '@/stores/user.js'
+import UserAvatar from "@/components/User/UserAvatar.vue";
 
 const authStore = useAuthStore()
 const userStore = useUserStore()
@@ -17,6 +18,12 @@ const logout = () => {
     <CDropdownToggle class="py-0 pe-0" :caret="false">
       <div v-if="user" class="d-flex align-items-center">
         <span class="me-2 d-none d-md-inline">{{ user.name }}</span>
+        <UserAvatar
+          :username="user.name"
+          :avatar-path="user.avatar"
+          :size="32"
+          class="nav-avatar"
+        />
       </div>
     </CDropdownToggle>
     <CDropdownMenu class="pt-0">
@@ -42,3 +49,14 @@ const logout = () => {
     </CDropdownMenu>
   </CDropdown>
 </template>
+
+<style scoped lang="scss">
+.nav-avatar {
+  :deep(img) {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}
+</style>

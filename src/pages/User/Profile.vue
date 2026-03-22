@@ -12,18 +12,27 @@ const { user } = storeToRefs(userStore);
 </script>
 
 <template>
-  <div class="w-100 justify-content-center d-flex">
-  <div class="card w-50 mt-3 d-flex flex-column">
-    <div class="user-header">
-      <UserAvatar :username="user.name" :avatar-path="user.avatar"/>
-      <div class="statistics-bar">
-        <StatisticItem name="Cosplays" :count=2 link="/cosplays"/>
-        <StatisticItem name="Cosplans" :count=124 link="/cosplans"/>
+  <div class="container-fluid py-3">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-6">
+        <div class="card p-3 d-flex flex-column">
+          <div class="user-header">
+            <UserAvatar :username="user.name" :avatar-path="user.avatar"/>
+            <div class="statistics-bar">
+              <StatisticItem name="Cosplays" :count="2" link="/cosplays"/>
+              <StatisticItem name="Cosplans" :count="124" link="/cosplans"/>
+            </div>
+          </div>
+          <div class="username mt-3">
+            {{ user.name }}
+            <CButton class="btn-sm ms-2" href="/settings">
+              <CIcon :icon="cilPen"/>
+            </CButton>
+          </div>
+          <UserBio/>
+        </div>
       </div>
     </div>
-    <div class="username">{{ user.name }}<CButton class="btn-sm" href="/settings"><CIcon :icon="cilPen" class=""/></CButton></div>
-    <UserBio/>
-  </div>
   </div>
 </template>
 
