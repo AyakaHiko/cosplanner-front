@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import PlannerList from "@/pages/Cosplays/PlannerList.vue";
+import PlannerList from "@/components/Cosplanner/PlannerList.vue";
 </script>
 
 <template>
