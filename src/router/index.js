@@ -41,6 +41,18 @@ const routes = [
         name: 'settings',
         component: () => import('@/pages/User/Settings.vue'),
         meta: { requiresAuth: true }
+      },
+      {
+        path: '/cosplans/add',
+        name: 'add-cosplan',
+        component: () => import('@/pages/Cosplays/AddCosplan.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/cosplans/:id',
+        name: 'cosplan-detail',
+        component: () => import('@/pages/Cosplays/CosplanDetail.vue'),
+        meta: { requiresAuth: true }
       }
     ]
   }

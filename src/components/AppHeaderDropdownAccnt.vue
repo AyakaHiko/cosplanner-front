@@ -36,8 +36,8 @@ const logout = () => {
       <CDropdownItem href="/profile">
         <CIcon icon="cil-user" class="me-2" /> Profile
       </CDropdownItem>
-      <CDropdownItem href="/cosplays">
-        <CIcon icon="cil-list" class="me-2" /> Cosplays
+      <CDropdownItem href="/cosplans">
+        <CIcon icon="cil-list" class="me-2" /> Cosplans
       </CDropdownItem>
       <CDropdownItem href="/settings">
         <CIcon icon="cil-settings" class="me-2" /> Settings
