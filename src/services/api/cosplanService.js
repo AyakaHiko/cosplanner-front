@@ -47,5 +47,39 @@ export const cosplanService = {
       body: JSON.stringify(cosplanData)
     });
     return response;
+  },
+
+  async uploadImage(cosplanId, formData) {
+    const response = await fetch(`${API}/api/cosplans/${cosplanId}/images`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': TokenStorage.getAuthHeader() || ''
+      },
+      body: formData
+    });
+    return response;
+  },
+
+  async deleteAlbum(cosplanId, albumId) {
+    const response = await fetch(`${API}/api/cosplans/${cosplanId}/albums/${albumId}`, {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': TokenStorage.getAuthHeader() || ''
+      }
+    });
+    return response;
+  },
+
+  async deleteImage(cosplanId, imageId) {
+    const response = await fetch(`${API}/api/cosplans/${cosplanId}/images/${imageId}`, {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': TokenStorage.getAuthHeader() || ''
+      }
+    });
+    return response;
   }
 };

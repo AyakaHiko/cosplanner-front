@@ -12,6 +12,7 @@
 @use "@coreui/coreui/scss/mixins/color-mode" as *;
 
 @use "planner";
+@use "cosplan";
 .example {
   &:not(:first-child) {
     margin-top: 1.5rem;

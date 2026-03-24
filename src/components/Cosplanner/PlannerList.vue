@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import PlannerItem from './PlannerItem.vue'
-import { ref, computed, onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { usePlannerStore } from '@/stores/planner'
 import {CButton, CSpinner} from "@coreui/vue";
 import {cilPlus} from '@coreui/icons'
