@@ -32,10 +32,6 @@ export function useCosplanDetail() {
   const selectedAlbumId = ref<number | null>(null)
   const selectedAlbumTitle = ref<string | null>(null)
 
-  const isLightboxOpen = ref(false)
-  const lightboxImages = ref<string[]>([])
-  const currentImageIndex = ref(0)
-
   const statusOptions = [
     { label: 'Future', value: 'future' },
     { label: 'In Progress', value: 'in_progress' },
@@ -99,18 +95,31 @@ export function useCosplanDetail() {
   }
 
   const handleFileUpload = async (event: Event) => {
+    const target = event.target as HTMLInputElement
+    if (!target.files || target.files.length === 0) return
+
     if (uploadType.value === 'main') {
       setImage(event)
     } else {
-      const target = event.target as HTMLInputElement
-      if (target.files && target.files[0]) {
-        await uploadImage(target.files[0], uploadType.value, selectedAlbumId.value, selectedAlbumTitle.value)
-        target.value = ''
+      const files = Array.from(target.files)
+      let uploadCount = 0
+
+      for (const file of files) {
+        const success = await uploadImage(file, uploadType.value, selectedAlbumId.value, selectedAlbumTitle.value, true)
+        if (success) {
+          uploadCount++
+        }
       }
+
+      if (uploadCount > 0) {
+        toast.success(`${uploadCount} ${uploadCount === 1 ? 'image' : 'images'} uploaded successfully`)
+        await fetchCosplan()
+      }
+      target.value = ''
     }
   }
 
-  const uploadImage = async (file: File, type: string, albumId: number | null = null, albumTitle: string | null = null) => {
+  const uploadImage = async (file: File, type: string, albumId: number | null = null, albumTitle: string | null = null, silent: boolean = false) => {
     const formData = new FormData()
     formData.append('image', file)
     formData.append('type', type)
@@ -128,31 +137,21 @@ export function useCosplanDetail() {
         if (type === 'main') {
           cosplan.value.main_image_path = result.main_image_path
           cosplan.value.main_image_url = result.main_image_url
-        } else {
-          // If we added a new album by title, we should probably refetch or manually update the albums list
-          // For simplicity, refetch the whole thing or just append the image
-          await fetchCosplan()
+          if (!silent) toast.success('Image uploaded successfully')
         }
-        toast.success('Image uploaded successfully')
         return true
       } else {
         const data = await response.json()
-        toast.error(data.message || 'Failed to upload image')
+        if (!silent) toast.error(data.message || 'Failed to upload image')
       }
     } catch (e) {
       console.error(e)
-      toast.error('Error uploading image')
+      if (!silent) toast.error('Error uploading image')
     }
     return false
   }
 
   const saveCroppedImage = async () => {
-    // This is a bit tricky because getCroppedImage in useImageCropper sets selectedFile async-ish via blob
-    // We might need to modify useImageCropper or handle it here.
-    // Let's modify useImageCropper to return the promise or just watch selectedFile.
-    // Actually, I'll just implement the logic here for better control if needed,
-    // or assume getCroppedImage is sync enough if I don't use the callback.
-
     if (!cropperRef.value) return
     const canvas = (cropperRef.value as any).getCroppedCanvas()
     if (!canvas) return
@@ -206,57 +205,41 @@ export function useCosplanDetail() {
     }
   }
 
-  const openLightbox = (albumImages: any[], startImageId: number) => {
-    lightboxImages.value = albumImages.map(img => img.url)
-    currentImageIndex.value = albumImages.findIndex(img => img.id === startImageId)
-    isLightboxOpen.value = true
-  }
-
-  const nextImage = () => {
-    if (lightboxImages.value.length === 0) return
-    currentImageIndex.value = (currentImageIndex.value + 1) % lightboxImages.value.length
-  }
-
-  const prevImage = () => {
-    if (lightboxImages.value.length === 0) return
-    currentImageIndex.value = (currentImageIndex.value - 1 + lightboxImages.value.length) % lightboxImages.value.length
-  }
-
   onMounted(() => {
     fetchCosplan()
   })
 
   return {
-    cosplan,
-    loading,
-    error,
-    editingField,
-    editValue,
-    statusOptions,
-    startEditing,
-    cancelEditing,
-    saveField,
-    uploadImage,
-    deleteImage,
-    deleteAlbum,
-    router,
-    // Cropper stuff
-    selectedFile,
-    cropperRef,
-    imageInput,
-    imgSrc,
-    isModalOpen,
-    handleFileUpload,
-    triggerUpload,
-    saveCroppedImage,
-    mainImage,
-    albums,
-    // Lightbox stuff
-    isLightboxOpen,
-    lightboxImages,
-    currentImageIndex,
-    openLightbox,
-    nextImage,
-    prevImage
+    state: {
+      cosplan,
+      loading,
+      error,
+      statusOptions,
+      router,
+    },
+    editing: {
+      field: editingField,
+      value: editValue,
+      start: startEditing,
+      cancel: cancelEditing,
+      save: saveField,
+    },
+    images: {
+      main: mainImage,
+      albums,
+      upload: uploadImage,
+      deleteImage,
+      deleteAlbum,
+    },
+    cropper: {
+      selectedFile,
+      cropperRef,
+      imageInput,
+      imgSrc,
+      isModalOpen,
+      handleFileUpload,
+      triggerUpload,
+      saveCroppedImage,
+    },
   }
 }
