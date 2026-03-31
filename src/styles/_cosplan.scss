@@ -1,4 +1,12 @@
 .cosplan-main-image {
+  border-radius: 50%;
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+  transition: opacity 0.2s ease-in-out;
   cursor: pointer;
 }
 

@@ -19,7 +19,7 @@ const onUpdateEditValue = (val: string) => {
   <div class="row mb-4 align-items-center">
     <div class="col-auto">
       <div
-        class="rounded-circle bg-light d-flex align-items-center justify-content-center overflow-hidden cosplan-main-image hover-opacity shadow-sm"
+        class="cosplan-main-image"
         style="width: 100px; height: 100px; border: 2px solid #fff;"
         @click="emit('trigger-upload', 'main')"
       >

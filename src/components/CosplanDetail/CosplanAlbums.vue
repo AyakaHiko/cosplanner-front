@@ -10,15 +10,10 @@ const props = defineProps<{
 const { albums } = toRefs(props)
 const { lightGalleryRef } = useLightGallery(albums)
 
-const emit = defineEmits(['create-album', 'delete-album', 'trigger-upload', 'delete-image'])
+const emit = defineEmits(['open-create-modal', 'delete-album', 'trigger-upload', 'delete-image'])
 
-const newAlbumName = ref('')
-
-const onCreateAlbum = () => {
-  if (newAlbumName.value.trim()) {
-    emit('create-album', newAlbumName.value.trim())
-    newAlbumName.value = ''
-  }
+const onOpenModal = () => {
+  emit('open-create-modal')
 }
 </script>
 
@@ -26,21 +21,12 @@ const onCreateAlbum = () => {
   <div class="mb-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h3 class="h5 fw-bold mb-0">Photo Albums</h3>
-      <div class="d-flex gap-2">
-        <CFormInput
-          v-model="newAlbumName"
-          placeholder="New Album Name"
-          size="sm"
-          style="width: 200px;"
-          @keyup.enter="onCreateAlbum"
-        />
-        <CButton color="primary" size="sm" @click="onCreateAlbum">
-          <CIcon :icon="cilPlus" class="me-1" /> Create
-        </CButton>
-      </div>
+      <CButton color="primary" size="sm" @click="onOpenModal">
+        <CIcon :icon="cilPlus" class="me-1" /> Create Album
+      </CButton>
     </div>
 
-    <div v-if="albums.length === 0" class="text-center py-4 bg-light rounded glass">
+    <div v-if="albums.length === 0" class="text-center py-4 rounded glass">
       <CIcon :icon="cilFolder" size="xl" class="text-secondary mb-2" />
       <p class="text-muted mb-0">No albums yet. Create one to organize your photos.</p>
     </div>
@@ -80,9 +66,9 @@ const onCreateAlbum = () => {
           </div>
           <!-- Quick add tile -->
           <div
-            class="rounded bg-light border d-flex align-items-center justify-content-center cursor-pointer cosplan-hover-bg-light shadow-sm"
+            class="rounded border d-flex align-items-center justify-content-center cursor-pointer cosplan-hover-bg-light shadow-sm"
             style="width: 120px; height: 120px; border-style: dashed !important;"
-            @click="emit('trigger-upload', 'reference', album.id)"
+            @click="emit('trigger-upload', 'album', album.id)"
           >
             <CIcon :icon="cilPlus" class="text-secondary" />
           </div>

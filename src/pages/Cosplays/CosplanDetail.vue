@@ -6,17 +6,21 @@ import CosplanMainHeader from '@/components/CosplanDetail/CosplanMainHeader.vue'
 import CosplanDescription from '@/components/CosplanDetail/CosplanDescription.vue'
 import CosplanInfo from '@/components/CosplanDetail/CosplanInfo.vue'
 import CosplanAlbums from '@/components/CosplanDetail/CosplanAlbums.vue'
-import CosplanCropperModal from '@/components/CosplanDetail/CosplanCropperModal.vue'
+import ImageCropperModal from '@/components/ImageCropperModal.vue'
+import CreateAlbumModal from '@/components/CosplanDetail/CreateAlbumModal.vue'
+import { ref } from 'vue'
 
 const {
   state: { cosplan, loading, error, statusOptions, router },
   editing,
-  images: { main: mainImage, albums, deleteImage, deleteAlbum },
+  images: { main: mainImage, albums, createAlbumAndUploadImages, deleteImage, deleteAlbum },
   cropper
 } = useCosplanDetail()
 
-const createAlbum = (name: string) => {
-  cropper.triggerUpload('reference', null, name)
+const isCreateAlbumModalOpen = ref(false)
+
+const createAlbum = async (payload: { title: string, files: File[] }) => {
+  await createAlbumAndUploadImages(payload.title, payload.files)
 }
 
 const removeDeadline = async () => {
@@ -94,7 +98,7 @@ const onSaveCroppedImage = (cropperInstance: any) => {
 
         <CosplanAlbums
           :albums="albums"
-          @create-album="createAlbum"
+          @open-create-modal="isCreateAlbumModalOpen = true"
           @delete-album="deleteAlbum"
           @trigger-upload="cropper.triggerUpload"
           @delete-image="deleteImage"
@@ -102,7 +106,13 @@ const onSaveCroppedImage = (cropperInstance: any) => {
       </div>
     </div>
 
-    <CosplanCropperModal
+    <CreateAlbumModal
+      :visible="isCreateAlbumModalOpen"
+      @close="isCreateAlbumModalOpen = false"
+      @create="createAlbum"
+    />
+
+    <ImageCropperModal
       :visible="cropper.isModalOpen.value"
       :img-src="cropper.imgSrc.value"
       @close="cropper.isModalOpen.value = false"

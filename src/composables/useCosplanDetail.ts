@@ -28,9 +28,8 @@ export function useCosplanDetail() {
   const editingField = ref<string | null>(null)
   const editValue = ref<any>(null)
 
-  const uploadType = ref<'main' | 'reference' | 'progress'>('main')
+  const uploadType = ref<'main' | 'album'>('main')
   const selectedAlbumId = ref<number | null>(null)
-  const selectedAlbumTitle = ref<string | null>(null)
 
   const statusOptions = [
     { label: 'Future', value: 'future' },
@@ -87,47 +86,88 @@ export function useCosplanDetail() {
     }
   }
 
-  const triggerUpload = (type: 'main' | 'reference' | 'progress', albumId: number | null = null, albumTitle: string | null = null) => {
+  const triggerUpload = (type: 'main' | 'album', albumId: number | null = null) => {
     uploadType.value = type
     selectedAlbumId.value = albumId
-    selectedAlbumTitle.value = albumTitle
     imageInput.value?.click()
+  }
+
+  const createAlbum = async (albumTitle: string | null = null)=>{
+    const response = await cosplanService.createAlbum(id, { title: albumTitle })
+    if (response.ok) {
+      const newAlbum = await response.json()
+      toast.success('Album created successfully');
+      return newAlbum.id;
+    }
+    else{
+      toast.error('Failed to create album');
+    }
+  }
+  const uploadMainImage = async (file: File) => {
+    return await uploadImage(file, 'main')
+  }
+
+  const uploadImagesToAlbum = async (files: File[], albumId: number) => {
+    let uploadCount = 0
+    for (const file of files) {
+      const success = await uploadImage(file, 'album', albumId, true)
+      if (success) {
+        uploadCount++
+      }
+    }
+
+    if (uploadCount > 0) {
+      toast.success(`${uploadCount} ${uploadCount === 1 ? 'image' : 'images'} uploaded successfully`)
+      await fetchCosplan()
+    }
+    return uploadCount
+  }
+
+  const createAlbumAndUploadImages = async (title: string, files: File[]) => {
+    try {
+      const formData = new FormData()
+      formData.append('title', title)
+      files.forEach((file) => {
+        formData.append('images[]', file)
+      })
+
+      const response = await cosplanService.createAlbumWithImages(id, formData)
+      if (response.ok) {
+        const newAlbum = await response.json()
+        toast.success('Album created successfully')
+        await fetchCosplan()
+        return newAlbum.id
+      } else {
+        const data = await response.json()
+        toast.error(data.message || 'Failed to create album')
+      }
+    } catch (e) {
+      console.error(e)
+      toast.error('Error creating album')
+    }
+    return null
   }
 
   const handleFileUpload = async (event: Event) => {
     const target = event.target as HTMLInputElement
     if (!target.files || target.files.length === 0) return
 
+    const files = Array.from(target.files)
+
     if (uploadType.value === 'main') {
       setImage(event)
-    } else {
-      const files = Array.from(target.files)
-      let uploadCount = 0
-
-      for (const file of files) {
-        const success = await uploadImage(file, uploadType.value, selectedAlbumId.value, selectedAlbumTitle.value, true)
-        if (success) {
-          uploadCount++
-        }
-      }
-
-      if (uploadCount > 0) {
-        toast.success(`${uploadCount} ${uploadCount === 1 ? 'image' : 'images'} uploaded successfully`)
-        await fetchCosplan()
-      }
+    } else if (uploadType.value === 'album' && selectedAlbumId.value) {
+      await uploadImagesToAlbum(files, selectedAlbumId.value)
       target.value = ''
     }
   }
 
-  const uploadImage = async (file: File, type: string, albumId: number | null = null, albumTitle: string | null = null, silent: boolean = false) => {
+  const uploadImage = async (file: File, type: 'main' | 'album', albumId: number | null = null, silent: boolean = false) => {
     const formData = new FormData()
     formData.append('image', file)
     formData.append('type', type)
     if (albumId) {
       formData.append('album_id', albumId.toString())
-    }
-    if (albumTitle) {
-      formData.append('album_title', albumTitle)
     }
 
     try {
@@ -152,20 +192,13 @@ export function useCosplanDetail() {
   }
 
   const saveCroppedImage = async () => {
-    if (!cropperRef.value) return
-    const canvas = (cropperRef.value as any).getCroppedCanvas()
-    if (!canvas) return
+    const file = await getCroppedImage('main_image.jpg');
+    if (!file) return;
 
-    canvas.toBlob(async (blob: any) => {
-      if (!blob) return
-      const file = new File([blob], 'main_image.jpg', { type: 'image/jpeg' })
-      const success = await uploadImage(file, 'main')
-      if (success) {
-        isModalOpen.value = false
-        imgSrc.value = ''
-        resetImageInput()
-      }
-    }, 'image/jpeg')
+    const success = await uploadMainImage(file);
+    if (success) {
+      resetImageInput();
+    }
   }
 
   const deleteAlbum = async (albumId: number) => {
@@ -227,7 +260,9 @@ export function useCosplanDetail() {
     images: {
       main: mainImage,
       albums,
-      upload: uploadImage,
+      uploadMainImage,
+      uploadImagesToAlbum,
+      createAlbumAndUploadImages,
       deleteImage,
       deleteAlbum,
     },

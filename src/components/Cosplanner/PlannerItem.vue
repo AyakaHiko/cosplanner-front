@@ -41,7 +41,7 @@ const mainImage = computed(() => {
       </div>
       <div v-else class="flex-shrink-0 ms-2">
         <div
-          class="rounded-circle bg-light d-flex align-items-center justify-content-center cosplan-avatar-placeholder"
+          class="rounded-circle d-flex align-items-center justify-content-center cosplan-avatar-placeholder"
         >
           <span class="text-muted">No pic</span>
         </div>

@@ -50,14 +50,15 @@ export function useUserSettings() {
   };
 
   const updateAvatar = async () => {
-    if (!selectedFile.value) {
-      toast.warning("Please select an image first");
+    const file = await getCroppedImage('avatar.jpg');
+    if (!file) {
+      toast.warning("Please select and crop an image first");
       return;
     }
 
     avatarLoading.value = true;
     try {
-      const response = await userStore.updateAvatar(selectedFile.value);
+      const response = await userStore.updateAvatar(file);
       selectedFile.value = null;
       resetImageInput();
       toast.success(response.message || "Avatar updated successfully");
@@ -80,6 +81,7 @@ export function useUserSettings() {
     imgSrc,
     isModalOpen,
     setImage,
-    getCroppedImage
+    getCroppedImage,
+    user
   };
 }

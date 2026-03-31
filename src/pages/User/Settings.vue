@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useUserSettings } from "@/composables/useUserSettings";
-import VueCropper from 'vue-cropperjs';
-import 'cropperjs/dist/cropper.css';
+import ImageCropperModal from '@/components/ImageCropperModal.vue';
 import {computed} from "vue";
 
 const {
@@ -16,13 +15,14 @@ const {
   imgSrc,
   isModalOpen,
   setImage,
-  getCroppedImage
+  getCroppedImage,
+  user
 } = useUserSettings();
 
-const previewUrl = computed(() => {
-  if (!selectedFile.value) return null
-  return URL.createObjectURL(selectedFile.value)
-})
+const onSaveCroppedImage = (cropperInstance: any) => {
+  cropperRef.value = cropperInstance
+  updateAvatar()
+}
 </script>
 
 <template>
@@ -31,24 +31,24 @@ const previewUrl = computed(() => {
       <div class="col-12 col-md-8 col-lg-6">
         <div class="card p-3 p-sm-4 d-flex flex-column align-items-center">
           <CForm
-            @submit.prevent="updateAvatar"
+            @submit.prevent="imageInput.click()"
             class="w-100 mb-4 border-bottom pb-4"
           >
             <div class="mb-3">
-              <CFormLabel>Upload Image</CFormLabel>
-              <CFormInput
+              <CFormLabel>Update Profile Picture</CFormLabel>
+              <input
                 ref="imageInput"
                 type="file"
                 accept="image/*"
                 @change="setImage"
-                required
+                class="d-none"
               />
             </div>
 
-            <div v-if="selectedFile" class="mb-3 text-center">
+            <div v-if="user?.avatar_url" class="mb-3 text-center">
               <img
-                :src="previewUrl"
-                alt="Preview"
+                :src="user.avatar_url"
+                alt="Avatar"
                 class="img-thumbnail rounded-circle"
                 style="width: 150px; height: 150px; object-fit: cover;"
               />
@@ -62,7 +62,7 @@ const previewUrl = computed(() => {
               class="w-100 w-sm-auto"
             >
               <CSpinner v-if="avatarLoading" component="span" size="sm" aria-hidden="true" class="me-2"/>
-              Update Picture
+              Select New Picture
             </CButton>
           </CForm>
 
@@ -101,42 +101,12 @@ const previewUrl = computed(() => {
             </CButton>
           </CForm>
 
-          <CModal
+          <ImageCropperModal
             :visible="isModalOpen"
+            :img-src="imgSrc"
             @close="isModalOpen = false"
-            size="lg"
-            alignment="center"
-          >
-            <CModalHeader>
-              <CModalTitle>Crop Image</CModalTitle>
-            </CModalHeader>
-            <CModalBody class="p-0">
-              <div style="height: 400px; max-width: 100%; overflow: hidden;">
-                <vue-cropper
-                  ref="cropperRef"
-                  :src="imgSrc"
-                  :aspect-ratio="1"
-                  :view-mode="1"
-                  :auto-crop-area="1"
-                  :movable="true"
-                  :rotatable="true"
-                  :scalable="true"
-                  :zoomable="true"
-                  :background="true"
-                  :responsive="true"
-                  img-style="max-width: 100%; max-height: 400px;"
-                />
-              </div>
-            </CModalBody>
-            <CModalFooter>
-              <CButton color="secondary" @click="isModalOpen = false">
-                Cancel
-              </CButton>
-              <CButton color="primary" @click="getCroppedImage">
-                Save
-              </CButton>
-            </CModalFooter>
-          </CModal>
+            @save="onSaveCroppedImage"
+          />
         </div>
       </div>
     </div>

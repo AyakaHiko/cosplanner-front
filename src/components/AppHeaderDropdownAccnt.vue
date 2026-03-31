@@ -14,9 +14,9 @@ const logout = () => {
 </script>
 
 <template>
-  <CDropdown placement="bottom-end" variant="nav-item">
-    <CDropdownToggle class="py-0 pe-0" :caret="false">
-      <div v-if="user" class="d-flex align-items-center">
+  <CDropdown variant="nav-item">
+    <CDropdownToggle class="py-0 pe-0 h-100" :caret="false">
+      <div v-if="user" class="d-flex align-items-center h-100">
         <span class="me-2 d-none d-md-inline">{{ user.name }}</span>
         <UserAvatar
           :username="user.name"

@@ -24,17 +24,29 @@ export function useImageCropper() {
     reader.readAsDataURL(file);
   };
 
-  const getCroppedImage = () => {
-    if (!cropperRef.value) return;
-    const canvas = (cropperRef.value as any).getCroppedCanvas();
-    if (!canvas) return;
-    canvas.toBlob((blob: any) => {
-      if (!blob) return;
-      selectedFile.value = new File([blob], 'avatar.jpg', { type: 'image/jpeg' });
-      imgSrc.value = '';
-      isModalOpen.value = false;
-      toast.success("Image cropped successfully");
-    }, 'image/jpeg');
+  const getCroppedImage = (fileName = 'image.jpg') => {
+    return new Promise<File | null>((resolve) => {
+      if (!cropperRef.value) {
+        resolve(null);
+        return;
+      }
+      const canvas = (cropperRef.value as any).getCroppedCanvas();
+      if (!canvas) {
+        resolve(null);
+        return;
+      }
+      canvas.toBlob((blob: any) => {
+        if (!blob) {
+          resolve(null);
+          return;
+        }
+        const file = new File([blob], fileName, { type: 'image/jpeg' });
+        selectedFile.value = file;
+        imgSrc.value = '';
+        isModalOpen.value = false;
+        resolve(file);
+      }, 'image/jpeg');
+    });
   };
 
   const resetImageInput = () => {
