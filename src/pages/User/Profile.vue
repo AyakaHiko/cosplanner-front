@@ -19,8 +19,9 @@ const { user } = storeToRefs(userStore);
           <div class="user-header">
             <UserAvatar :username="user.name" :avatar-path="user.avatar"/>
             <div class="statistics-bar">
-              <StatisticItem name="Cosplays" :count="2" link="/cosplays"/>
-              <StatisticItem name="Cosplans" :count="124" link="/cosplans"/>
+              <StatisticItem name="In Plans" :count="user.future_count || 0" link="/cosplans"/>
+              <StatisticItem name="In Progress" :count="user.in_progress_count || 0" link="/cosplans"/>
+              <StatisticItem name="Ready" :count="user.ready_count || 0" link="/cosplans"/>
             </div>
           </div>
           <div class="username mt-3">
@@ -28,6 +29,9 @@ const { user } = storeToRefs(userStore);
             <CButton class="btn-sm ms-2" href="/settings">
               <CIcon :icon="cilPen"/>
             </CButton>
+          </div>
+          <div v-if="user.registration_date" class="registration-date text-muted small mb-2">
+            Joined Cosplanner in {{ user.registration_date }}
           </div>
           <UserBio/>
         </div>

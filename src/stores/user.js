@@ -9,6 +9,10 @@ export const useUserStore = defineStore('user', {
       name: null,
       email: null,
       avatar: null,
+      future_count: null,
+      in_progress_count: null,
+      ready_count: null,
+      registration_date: null
     }
   }),
 
