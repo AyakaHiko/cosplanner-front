@@ -1,41 +1,82 @@
-# cosplanner-front
+# 🎭 Cosplanner Frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+This is the Vue 3-based frontend application for the Cosplanner project. It provides a modern, responsive single-page application (SPA) for cosplayers to manage their projects.
 
-## Recommended IDE Setup
+## 🛠 Tech Stack
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- **Framework:** [Vue 3](https://vuejs.org/) (Composition API)
+- **Build Tool:** [Vite 6](https://vitejs.dev/)
+- **State Management:** [Pinia](https://pinia.vuejs.org/)
+- **Routing:** [Vue Router 4](https://router.vuejs.org/)
+- **UI Frameworks:**
+    - [CoreUI Vue 5](https://coreui.io/vue/)
+    - [Bootstrap 5](https://getbootstrap.com/)
+- **Key Libraries:**
+    - [CropperJS](https://github.com/fengyuanchen/cropperjs) & [Vue Cropperjs](https://github.com/Agontuk/vue-cropperjs) (Image cropping)
+    - [Lightgallery](https://www.lightgalleryjs.com/) (Image viewing)
+    - [VueDraggable](https://github.com/SortableJS/vue.draggable.next) (Drag-and-drop support)
+    - [Vue Toastification](https://github.com/Maronato/vue-toastification) (Notifications)
+    - [DiceBear](https://www.dicebear.com/) (Avatar generation)
+- **Styling:** SASS / SCSS
+- **Testing:** [Vitest](https://vitest.dev/) & Vue Test Utils
 
-## Customize configuration
+## 🚀 Key Features
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+- **Project Dashboard:** Visual overview of all ongoing and planned cosplay projects.
+- **Advanced Image Editing:** Built-in cropper for profile pictures and project thumbnails.
+- **Reference Management:** Organized albums for inspiration and reference photos.
+- **Dynamic Workflows:** Drag-and-drop functionality for organizing tasks and materials.
+- **Authentication:** Secure login and registration (JWT integration with backend).
+- **Responsive Design:** Fully optimized for desktop and mobile devices.
 
-## Project Setup
+## 📁 Project Structure
 
-```sh
-npm install
-```
+- `src/assets` — Static assets (images, icons).
+- `src/components` — Reusable Vue components.
+- `src/composables` — Composition API logic (hooks).
+- `src/layouts` — Layout components (Default, Guest).
+- `src/pages` — View components / routes.
+- `src/router` — Navigation and route middleware.
+- `src/services` — API client and external service integrations.
+- `src/stores` — Pinia state management modules (auth, planner, ui, etc.).
+- `src/styles` — Global SCSS styles and theme configurations.
 
-### Compile and Hot-Reload for Development
+## ⚙️ Installation & Development
 
-```sh
-npm run dev
-```
+### Prerequisites
+- [Node.js](https://nodejs.org/) (version 18+ recommended)
+- [npm](https://www.npmjs.com/)
 
-### Compile and Minify for Production
+### Setup
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-```sh
-npm run build
-```
+2. **Run development server:**
+   ```bash
+   npm run dev
+   ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+3. **Build for production:**
+   ```bash
+   npm run build
+   ```
 
-```sh
-npm run test:unit
-```
+## 🛠 Quality Control
 
-### Lint with [ESLint](https://eslint.org/)
+- **Linting:**
+  ```bash
+  npm run lint
+  ```
+- **Formatting (Prettier):**
+  ```bash
+  npm run format
+  ```
+- **Unit Testing:**
+  ```bash
+  npm run test:unit
+  ```
 
-```sh
-npm run lint
-```
+---
+*Developed with Vue 3 and Vite.*
