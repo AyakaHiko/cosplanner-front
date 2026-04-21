@@ -25,6 +25,29 @@ const routes = [
         meta: { requiresGuest: true }
       },
       {
+        path: '/email-sent',
+        name: 'email-sent',
+        component: () => import('@/pages/Authorization/EmailSent.vue'),
+        meta: { requiresGuest: true }
+      },
+      {
+        path: '/email-verified',
+        name: 'email-verified',
+        component: () => import('@/pages/Authorization/EmailVerified.vue'),
+      },
+      {
+        path: '/forgot-password',
+        name: 'forgot-password',
+        component: () => import('@/pages/Authorization/ForgotPassword.vue'),
+        meta: { requiresGuest: true }
+      },
+      {
+        path: '/reset-password/:token',
+        name: 'reset-password',
+        component: () => import('@/pages/Authorization/ResetPassword.vue'),
+        meta: { requiresGuest: true }
+      },
+      {
         path: '/profile',
         name: 'profile',
         component: () => import('@/pages/User/Profile.vue'),
