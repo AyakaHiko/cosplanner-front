@@ -11,10 +11,8 @@ export const useUiStore = defineStore('ui', () => {
     return mediaQuery.matches ? 'dark' : 'light'
   }
   function setTheme(value) {
-    console.log(value)
     if(value === 'default')
       value = getSystemTheme();
-    console.log(value)
     theme.value = value;
     localStorage.setItem('theme', value);
     document.body.setAttribute('data-bs-theme', value);
