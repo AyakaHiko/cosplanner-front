@@ -3,10 +3,18 @@ import {defineStore} from "pinia";
 import {useUserStore} from "@/stores/user.js";
 
 export const useUiStore = defineStore('ui', () => {
-  const theme = ref(localStorage.getItem('theme') || 'light');
+  const theme = ref(localStorage.getItem('theme') || 'default');
   const emailBannerDismissedAt = ref(null);
+  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
 
+  function getSystemTheme() {
+    return mediaQuery.matches ? 'dark' : 'light'
+  }
   function setTheme(value) {
+    console.log(value)
+    if(value === 'default')
+      value = getSystemTheme();
+    console.log(value)
     theme.value = value;
     localStorage.setItem('theme', value);
     document.body.setAttribute('data-bs-theme', value);

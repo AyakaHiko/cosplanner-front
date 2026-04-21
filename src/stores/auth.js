@@ -54,18 +54,9 @@ export const useAuthStore = defineStore('auth', {
           throw new Error(data.message || 'Registration failed');
         }
 
-        this.token = data.access_token;
-        TokenStorage.setToken(this.token, false);
-        this.isAuthenticated = true;
-
-        const userStore = useUserStore();
-        await userStore.fetchProfile();
         return data;
       } catch (e) {
         console.error('Registration error:', e.message);
-        this.token = null;
-        TokenStorage.removeToken();
-        this.isAuthenticated = false;
         throw e;
       }
     },

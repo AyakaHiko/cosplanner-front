@@ -4,7 +4,7 @@ import { useColorModes } from '@coreui/vue'
 import AppHeaderDropdownAccnt from '@/components/AppHeaderDropdownAccnt.vue'
 import { useAuthStore } from '@/stores/auth.js'
 
-const { colorMode, setColorMode } = useColorModes('coreui-free-vue-admin-template-theme')
+const { colorMode, setColorMode } = useColorModes('theme')
 const authStore = useAuthStore()
 const isAuthenticated = computed(() => authStore.isAuthenticated)
 </script>
