@@ -76,6 +76,12 @@ const routes = [
         name: 'cosplan-detail',
         component: () => import('@/pages/Cosplays/CosplanDetail.vue'),
         meta: { requiresAuth: true }
+      },
+      {
+        path: '/admin/users',
+        name: 'admin-users',
+        component: () => import('@/pages/Admin/UserManagement.vue'),
+        meta: { requiresAuth: true, requiresAdmin: true }
       }
     ]
   }

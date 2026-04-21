@@ -3,10 +3,13 @@ import { computed } from 'vue'
 import { useColorModes } from '@coreui/vue'
 import AppHeaderDropdownAccnt from '@/components/AppHeaderDropdownAccnt.vue'
 import { useAuthStore } from '@/stores/auth.js'
+import { useUserStore } from '@/stores/user.js'
 
 const { colorMode, setColorMode } = useColorModes('theme')
 const authStore = useAuthStore()
+const userStore = useUserStore()
 const isAuthenticated = computed(() => authStore.isAuthenticated)
+const isAdmin = computed(() => userStore.user.role === 'admin')
 </script>
 
 <template>
@@ -16,6 +19,12 @@ const isAuthenticated = computed(() => authStore.isAuthenticated)
         <CNavItem>
           <CNavLink href="/"> Cosplanner </CNavLink>
         </CNavItem>
+        <CDropdown v-if="isAdmin" variant="nav-item">
+          <CDropdownToggle>Admin</CDropdownToggle>
+          <CDropdownMenu>
+            <CDropdownItem href="/admin/users">User Management</CDropdownItem>
+          </CDropdownMenu>
+        </CDropdown>
       </CHeaderNav>
 
       <CHeaderNav class="ms-auto">

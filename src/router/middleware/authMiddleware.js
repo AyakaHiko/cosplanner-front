@@ -1,6 +1,7 @@
 import { TokenStorage } from '@/utils/tokenStorage.js';
+import { useUserStore } from "@/stores/user.js";
 
-export default function authMiddleware(to, from, next) {
+export default async function authMiddleware(to, from, next) {
   const isAuthenticated = Boolean(TokenStorage.getToken());
 
   if (to.meta.requiresAuth && !isAuthenticated) {
@@ -8,6 +9,18 @@ export default function authMiddleware(to, from, next) {
   }
   if (to.meta.requiresGuest && isAuthenticated) {
     return next({ name: 'home' });
+  }
+
+  if (to.meta.requiresAdmin) {
+    const userStore = useUserStore();
+    // Ensure user data is loaded
+    if (!userStore.user.id) {
+      await userStore.fetchProfile();
+    }
+
+    if (userStore.user.role !== 'admin') {
+      return next({ name: 'home' });
+    }
   }
 
   next();
