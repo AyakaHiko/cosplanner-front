@@ -82,7 +82,9 @@ export function useAuth() {
       console.error('Reset password failed:', error);
     }
   };
-
+  const getGoogleAuthCredentials = ()=> {
+    return authStore.getGoogleAuthCredentials();
+  }
   return {
     loginForm,
     registerForm,
@@ -92,6 +94,7 @@ export function useAuth() {
     handleRegister,
     handleForgotPassword,
     handleResetPassword,
+    getGoogleAuthCredentials,
     router
   };
 }

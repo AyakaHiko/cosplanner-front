@@ -1,5 +1,6 @@
 <script setup>
 import { useAuth } from "@/composables/useAuth";
+import GoogleAuthButton from "@/components/Auth/GoogleAuthButton.vue";
 
 const { loginForm: form, handleLogin, router } = useAuth();
 </script>
@@ -47,6 +48,7 @@ const { loginForm: form, handleLogin, router } = useAuth();
                       </CButton>
                     </CCol>
                   </CRow>
+                  <GoogleAuthButton/>
                 </CForm>
               </CCardBody>
             </CCard>

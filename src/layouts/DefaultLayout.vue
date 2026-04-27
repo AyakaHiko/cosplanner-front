@@ -2,7 +2,7 @@
 import { CContainer } from '@coreui/vue'
 import AppFooter from '@/components/AppFooter.vue'
 import AppHeader from '@/components/AppHeader.vue'
-import EmailVerificationBanner from '@/components/EmailVerificationBanner.vue'
+import EmailVerificationBanner from '@/components/Auth/EmailVerificationBanner.vue'
 </script>
 
 <template>

@@ -68,5 +68,25 @@ export const authService = {
       }
     });
     return response;
+  },
+  getGoogleAuthCredentials() {
+    return {
+      'client_id':import.meta.env.VITE_GOOGLE_CLIENT_ID,
+      'redirect_uri':import.meta.env.VITE_GOOGLE_REDIRECT_URI,
+    };
+  }
+};
+
+export const googleAuthService = {
+  async login(credential) {
+    const response = await fetch(`${API}/api/auth/google/callback`, {
+      method: 'POST',
+      body: JSON.stringify({ credential }),
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include'
+    });
+    return response;
   }
 };
