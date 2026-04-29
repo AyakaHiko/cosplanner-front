@@ -18,5 +18,8 @@ onMounted(async () => {
 
 
 <style scoped>
-
+.login-provider-google,
+.login-provider-google * {
+  color-scheme: light;
+}
 </style>

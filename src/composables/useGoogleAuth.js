@@ -1,6 +1,9 @@
-import { ref, onMounted } from 'vue'
+import {ref, onMounted, watch} from 'vue'
 import { useAuthStore } from '@/stores/auth.js'
 import { useRouter } from 'vue-router'
+import {useThemeStore} from "@/stores/theme.js";
+import {useUiStore} from "@/stores/ui.js";
+const currentTheme = useUiStore()
 
 export function useGoogleAuth() {
     const isLoaded = ref(false)
@@ -37,18 +40,21 @@ export function useGoogleAuth() {
     const initializeButton = (elementId) => {
         const { client_id } = authStore.getGoogleAuthCredentials()
 
-        window.google.accounts.id.initialize({
+      window.google.accounts.id.initialize({
             client_id: client_id,
             callback: handleCredentialResponse
         })
-
-        const element = document.getElementById(elementId)
-        if (element) {
-            window.google.accounts.id.renderButton(
-                element,
-                { theme: 'outline', size: 'large', width: '100%' }
-            )
-        }
+      const element = document.getElementById(elementId)
+      if (element) {
+        const theme = currentTheme.theme === 'dark' ? 'filled_black' : 'outline';
+          google.accounts.id.renderButton(
+            element,
+            {
+              theme,
+              type: "standard"
+            }
+        );
+      }
     }
 
     const signOut = () => {
