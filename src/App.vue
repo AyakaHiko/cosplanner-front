@@ -42,5 +42,5 @@ onMounted(async () => {
 </template>
 <style lang="scss">
 @use 'styles/style';
-@use 'styles/_main';
+@use 'styles/main';
 </style>

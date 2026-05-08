@@ -50,9 +50,9 @@ onMounted(() => {
     <template v-else>
       <!-- Mobile navigation (visible only on mobile) -->
       <div class="d-flex d-md-none align-items-center justify-content-between mb-4">
-        <button class="btn btn-light shadow-sm planner-nav-btn" @click="plannerStore.prevColumn">&lsaquo;</button>
+        <button class="btn shadow-sm planner-nav-btn" @click="plannerStore.prevColumn">&lsaquo;</button>
         <h2 class="h5 m-0 fw-bold">{{ activeColumn.title }}</h2>
-        <button class="btn btn-light planner-nav-btn" @click="plannerStore.nextColumn">&rsaquo;</button>
+        <button class="btn planner-nav-btn" @click="plannerStore.nextColumn">&rsaquo;</button>
       </div>
 
       <div class="row g-4 planner-columns-row">
@@ -77,7 +77,7 @@ onMounted(() => {
                 </template>
               </draggable>
             </div>
-            <CButton class="btn btn-outline d-block w-100 mt-2" @click="router.push({ name: 'add-cosplan', query: { status: key } })">
+            <CButton class="btn btn-outline-secondary d-block w-100 mt-2" @click="router.push({ name: 'add-cosplan', query: { status: key } })">
               <CIcon :icon="cilPlus" />
             </CButton>
           </div>
