@@ -194,15 +194,14 @@ body {
   color: #1f3b12 !important;
 }
 
-.text-secondary{
-  color: #{$secondary-bg-subtle} !important;
-}
+
 [data-coreui-theme="light"],
 [data-bs-theme="light"] {
   // PRIMARY
   --cui-primary: #ae88f2;
   --cui-primary-rgb: 174, 136, 242;
   --cui-border-color: #{$secondary};
+  --cui-heading-color: rgb(37, 43, 54);
 
 
   // SUCCESS

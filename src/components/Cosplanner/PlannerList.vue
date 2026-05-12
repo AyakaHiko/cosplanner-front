@@ -51,7 +51,7 @@ onMounted(() => {
       <!-- Mobile navigation (visible only on mobile) -->
       <div class="d-flex d-md-none align-items-center justify-content-between mb-4">
         <button class="btn shadow-sm planner-nav-btn" @click="plannerStore.prevColumn">&lsaquo;</button>
-        <h2 class="h5 m-0 fw-bold">{{ activeColumn.title }}</h2>
+        <h2 class="h5 text-secondary m-0 fw-bold">{{ activeColumn.title }}</h2>
         <button class="btn planner-nav-btn" @click="plannerStore.nextColumn">&rsaquo;</button>
       </div>
 
