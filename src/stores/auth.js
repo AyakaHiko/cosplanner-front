@@ -155,9 +155,6 @@ export const useAuthStore = defineStore('auth', {
         this.isAuthenticated = false;
         throw e;
       }
-    },
-    getGoogleAuthCredentials() {
-      return authService.getGoogleAuthCredentials();
     }
   }
 });

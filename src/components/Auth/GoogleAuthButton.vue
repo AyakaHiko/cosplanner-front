@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from "vue";
-import { useGoogleAuth } from "@/composables/useGoogleAuth.js";
+import { useGoogleAuth } from "@/composables/useGoogleAuth.ts";
 
 const { initializeGoogleAuth, initializeButton } = useGoogleAuth();
 

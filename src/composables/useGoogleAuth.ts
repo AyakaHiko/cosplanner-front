@@ -1,16 +1,26 @@
-import {ref, onMounted, watch} from 'vue'
+import {ref, onMounted} from 'vue'
 import { useAuthStore } from '@/stores/auth.js'
 import { useRouter } from 'vue-router'
-import {useThemeStore} from "@/stores/theme.js";
 import {useUiStore} from "@/stores/ui.js";
-const currentTheme = useUiStore()
+import {authService} from "@/services/api/authService.js";
+
+declare global {
+  interface Window {
+    google: any;
+  }
+}
+
+interface GoogleAuthCredentialResponse {
+  credential: string;
+}
 
 export function useGoogleAuth() {
     const isLoaded = ref(false)
     const authStore = useAuthStore()
+    const uiStore = useUiStore()
     const router = useRouter()
 
-    const initializeGoogleAuth = () => {
+    const initializeGoogleAuth = (): Promise<void> => {
         return new Promise((resolve) => {
             if (window.google) {
                 resolve()
@@ -28,7 +38,7 @@ export function useGoogleAuth() {
         })
     }
 
-    const handleCredentialResponse = async (response) => {
+    const handleCredentialResponse = async (response: GoogleAuthCredentialResponse) => {
         try {
             await authStore.googleLogin(response.credential)
             await router.push({ name: 'profile' })
@@ -37,8 +47,8 @@ export function useGoogleAuth() {
         }
     }
 
-    const initializeButton = (elementId) => {
-        const { client_id } = authStore.getGoogleAuthCredentials()
+    const initializeButton = (elementId: string) => {
+        const { client_id } = authService.getGoogleAuthCredentials()
 
       window.google.accounts.id.initialize({
             client_id: client_id,
@@ -46,8 +56,8 @@ export function useGoogleAuth() {
         })
       const element = document.getElementById(elementId)
       if (element) {
-        const theme = currentTheme.theme === 'dark' ? 'filled_black' : 'outline';
-          google.accounts.id.renderButton(
+        const theme = uiStore.theme === 'dark' ? 'filled_black' : 'outline';
+          window.google.accounts.id.renderButton(
             element,
             {
               theme,
