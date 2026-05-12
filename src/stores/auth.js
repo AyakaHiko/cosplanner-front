@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { useUserStore } from './user';
 import { TokenStorage } from '@/utils/tokenStorage.js';
-import { authService } from '@/services/api/authService.js';
+import { authService, googleAuthService } from '@/services/api/authService.js';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -130,6 +130,34 @@ export const useAuthStore = defineStore('auth', {
         console.error('Reset password error:', e.message);
         throw e;
       }
+    },
+    async googleLogin(credential) {
+      try {
+        const response = await googleAuthService.login(credential);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Google login failed');
+        }
+
+        this.token = data.access_token;
+        TokenStorage.setToken(this.token, true); // По умолчанию сохраняем
+        this.isAuthenticated = true;
+
+        const userStore = useUserStore();
+        userStore.user = data.user;
+
+        return data;
+      } catch (e) {
+        console.error('Google login error:', e.message);
+        this.token = null;
+        TokenStorage.removeToken();
+        this.isAuthenticated = false;
+        throw e;
+      }
+    },
+    getGoogleAuthCredentials() {
+      return authService.getGoogleAuthCredentials();
     }
   }
 });
