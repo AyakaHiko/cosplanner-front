@@ -54,18 +54,25 @@ export const useAuthStore = defineStore('auth', {
           throw new Error(data.message || 'Registration failed');
         }
 
-        this.token = data.access_token;
-        TokenStorage.setToken(this.token, false);
-        this.isAuthenticated = true;
-
-        const userStore = useUserStore();
-        await userStore.fetchProfile();
         return data;
       } catch (e) {
         console.error('Registration error:', e.message);
-        this.token = null;
-        TokenStorage.removeToken();
-        this.isAuthenticated = false;
+        throw e;
+      }
+    },
+
+    async resendVerificationEmail() {
+      try {
+        const response = await authService.resendVerificationEmail(this.token);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to resend verification email');
+        }
+
+        return data;
+      } catch (e) {
+        console.error('Resend verification error:', e.message);
         throw e;
       }
     },
@@ -90,6 +97,38 @@ export const useAuthStore = defineStore('auth', {
         this.token = null;
         TokenStorage.removeToken();
         this.isAuthenticated = false;
+      }
+    },
+
+    async forgotPassword(email) {
+      try {
+        const response = await authService.forgotPassword(email);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to send reset link');
+        }
+
+        return data;
+      } catch (e) {
+        console.error('Forgot password error:', e.message);
+        throw e;
+      }
+    },
+
+    async resetPassword(payload) {
+      try {
+        const response = await authService.resetPassword(payload);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to reset password');
+        }
+
+        return data;
+      } catch (e) {
+        console.error('Reset password error:', e.message);
+        throw e;
       }
     }
   }
