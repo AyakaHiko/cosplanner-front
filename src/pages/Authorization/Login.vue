@@ -42,7 +42,7 @@ const { loginForm: form, handleLogin, router } = useAuth();
                       <CButton type="submit" color="primary" class="px-4 w-100 w-sm-auto"> Login </CButton>
                     </CCol>
                     <CCol :xs="12" :sm="6" class="text-sm-end">
-                      <CButton color="link" class="px-0">
+                      <CButton color="link" class="px-0" @click="router.push('/forgot-password')">
                         Forgot password?
                       </CButton>
                     </CCol>

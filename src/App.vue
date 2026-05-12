@@ -8,7 +8,7 @@ import { useThemeStore } from '@/stores/theme.js'
 const authStore = useAuthStore()
 
 const { isColorModeSet, setColorMode } = useColorModes(
-  'coreui-free-vue-admin-template-theme',
+  'theme',
 )
 const currentTheme = useThemeStore()
 
