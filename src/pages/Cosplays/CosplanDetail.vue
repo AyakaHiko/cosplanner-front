@@ -94,7 +94,7 @@ const onSaveCroppedImage = (cropperInstance: any) => {
           @remove-deadline="removeDeadline"
         />
 
-        <hr class="my-5" />
+        <hr class="my-5 opacity-100" />
 
         <CosplanAlbums
           :albums="albums"

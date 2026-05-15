@@ -21,7 +21,7 @@ const onOpenModal = () => {
   <div class="mb-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h3 class="h5 fw-bold mb-0">Photo Albums</h3>
-      <CButton color="primary" size="sm" @click="onOpenModal">
+      <CButton color="secondary" size="sm" @click="onOpenModal">
         <CIcon :icon="cilPlus" class="me-1" /> Create Album
       </CButton>
     </div>
@@ -40,7 +40,7 @@ const onOpenModal = () => {
               <CIcon :icon="cilTrash" size="sm" />
             </CButton>
           </div>
-          <CButton color="primary" variant="ghost" size="sm" @click="emit('trigger-upload', 'reference', album.id)">
+          <CButton color="secondary" variant="ghost" size="sm" @click="emit('trigger-upload', 'reference', album.id)">
             <CIcon :icon="cilPlus" class="me-1" /> Add Photo
           </CButton>
         </div>
