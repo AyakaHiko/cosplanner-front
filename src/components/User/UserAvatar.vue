@@ -28,10 +28,15 @@ const updateAvatar = () => {
   } else if (props.avatarPath && typeof props.avatarPath === 'object' && props.avatarPath.path) {
     avatarUri.value = `${AWS_URL}/${props.avatarPath.path}`;
   } else {
+    const primary = getComputedStyle(document.documentElement)
+      .getPropertyValue('--cui-primary')
+      .trim()
+      .replace('#', '')
+
     avatarUri.value = createAvatar(lorelei, {
       size: props.size,
       seed: props.username || 'default',
-      backgroundColor: ["b6e3f4", "c0aede", "d1d4f9"]
+      backgroundColor: [primary]
     }).toDataUri();
   }
 };

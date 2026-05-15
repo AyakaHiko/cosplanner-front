@@ -1,10 +1,13 @@
 @use "@coreui/coreui/scss/coreui" as * with (
-  $enable-deprecation-messages: false
+  $enable-deprecation-messages: false,
+  $secondary: #7a5bc1,
+  $primary: #6240a8
 );
 @use "@coreui/chartjs/scss/coreui-chartjs";
 @use "vendors/simplebar";
 @use "base";
 @use "main";
+@use "sass:color";
 
 /* stylelint-disable scss/selector-no-redundant-nesting-selector */
 @use "@coreui/coreui/scss/variables" as *;
@@ -182,5 +185,58 @@ body {
 
   .footer {
     --cui-footer-bg: var(--cui-body-bg);
+  }
+}
+
+// TOASTIFICATION
+.Vue-Toastification__toast--success {
+  background-color: var(--cui-success) !important;
+  color: #1f3b12 !important;
+}
+
+
+:root {
+  --cui-border-color: #{$secondary};
+  hr {
+    color: #{$secondary} !important;
+  }
+  // PRIMARY
+  --cui-primary: #{$primary};
+  --cui-primary-rgb: #{red($primary)}, #{green($primary)}, #{blue($primary)};
+
+  // SECONDARY
+  --cui-secondary: #{$secondary};
+  --cui-secondary-rgb: #{red($secondary)}, #{green($secondary)}, #{blue($secondary)};
+
+  // SUCCESS
+  --cui-success: #8bcf72;
+  --cui-success-rgb: 139, 207, 114;
+}
+
+[data-coreui-theme="light"],
+[data-bs-theme="light"] {
+  // PRIMARY
+  --cui-border-color: #{darken($secondary, 5%)};
+  --cui-secondary: #{darken($secondary, 15%)};
+
+}
+
+[data-coreui-theme="dark"],
+[data-bs-theme="dark"] {
+  // SECONDARY
+  --cui-secondary: #a58ae2;
+  --cui-secondary-rgb: 165, 138, 226;
+
+  // Active dropdown/menu items
+  --bs-dropdown-link-active-bg: #8c70d4;
+  --bs-dropdown-link-active-color: #ffffff;
+  .btn-primary,
+  .btn-outline-primary {
+    color: #ffffff !important;
+  }
+
+  .btn-success,
+  .btn-outline-success {
+    color: #102008 !important;
   }
 }
